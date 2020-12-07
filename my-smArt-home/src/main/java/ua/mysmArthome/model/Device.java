@@ -8,11 +8,17 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "devices")
+@Table(name = "Device")
 public class Device {
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+
+    @Column(name = "name", nullable = false)
     private String name; //name of the device
+
+    @Column(name = "status", nullable = false)
     private boolean status=false; //indicates if its on or off
 
     public Device(){}
@@ -20,14 +26,11 @@ public class Device {
     public Device(String name){
         this.name=name;
     }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public long getId() {
+    
+    public int getId() {
         return id;
     }
-
-    @Column(name = "name", nullable = false)
+    
     public String getName() {
         return name;
     }
@@ -37,7 +40,6 @@ public class Device {
         this.name = name;
     }
 
-    @Column(name = "status", nullable = false)
     public boolean getStatus() {
         return status;
     }
