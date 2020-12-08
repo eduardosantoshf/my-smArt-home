@@ -52,10 +52,8 @@ public class User {
         return phone_number;
     }
 
-    /* should we have a getter for password?
     public String getPassword() {
         return password;
     }
-    */
     
 }
