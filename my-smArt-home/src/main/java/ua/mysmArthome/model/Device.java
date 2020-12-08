@@ -18,6 +18,9 @@ public class Device {
     @Column(name = "name", nullable = false)
     private String name; //name of the device
 
+    @Column(name = "type", nullable = false)
+    private String type; //type of the device
+
     @Column(name = "status", nullable = false)
     private boolean status=false; //indicates if its on or off
 
@@ -33,6 +36,10 @@ public class Device {
     
     public String getName() {
         return name;
+    }
+
+    public String getType(){
+        return type;
     }
 
     public void setName(String name) {
