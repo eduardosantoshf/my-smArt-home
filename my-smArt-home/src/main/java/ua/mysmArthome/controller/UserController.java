@@ -3,6 +3,7 @@ package ua.mysmArthome.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import ua.mysmArthome.repository.UserRepository;
 import ua.mysmArthome.model.User;
@@ -38,16 +39,19 @@ public class UserController {
         return false;
     }
 
-    @GetMapping("/register")
-    public boolean getRegister(String email,String username, String pwd, String confirmPwd){
+    @PostMapping("/register")
+    public boolean getRegister(String email,String username, String pwd, String confirmPwd, String phone_number){
         User user0 = userRepository.findByUsername(username);
         if (user0 != null)
             return false;
         User user1 = userRepository.findByEmail(email);
         if (user1 != null)
             return false;
-        if(pwd.equals(confirmPwd))
+        if(pwd.equals(confirmPwd)){
+            User user = new User(email,username,pwd,phone_number);
+            userRepository.save(user);
             return true;
+        }
         return false;
     }
 }
