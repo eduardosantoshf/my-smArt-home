@@ -4,6 +4,7 @@ import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -16,6 +17,7 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @CrossOrigin
     @GetMapping("/login")
     public String getLogin(String username, String pwd){
         //confirm if we received the username and token
@@ -37,6 +39,7 @@ public class UserController {
         return "{\"status\":false,\"reason\":\"User and password incorrect\"";
     }
 
+    @CrossOrigin
     @PostMapping("/register")
     public String getRegister(String email,String username, String pwd, String confirmPwd, String phone_number){
         User user0 = userRepository.findByUsername(username);

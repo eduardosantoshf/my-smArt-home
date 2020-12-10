@@ -2,6 +2,7 @@ package ua.mysmArthome.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import ua.mysmArthome.model.Device;
@@ -15,6 +16,7 @@ public class DeviceController {
     @Autowired
     private DeviceRepository deviceRepository;
 
+    @CrossOrigin
     @GetMapping("/devices")
     public String getDevices(){
         //get all devices
