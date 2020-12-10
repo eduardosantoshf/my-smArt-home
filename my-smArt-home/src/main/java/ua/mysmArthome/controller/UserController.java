@@ -1,5 +1,7 @@
 package ua.mysmArthome.controller;
 
+import java.util.Random;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,44 +16,63 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    /*Add something like this to receive values for /login and /register
-    <form action="#" th:action="@{/saveStudent}" th:object="${student}" method="post">
-        <table border="1">
-            <tr>
-                <td><label th:text="#{msg.id}" /></td>
-                <td><input type="number" th:field="*{id}" /></td>
-            </tr>
-            <tr>
-                <td><label th:text="#{msg.name}" /></td>
-                <td><input type="text" th:field="*{name}" /></td>
-            </tr>
-            <tr>
-                <td><input type="submit" value="Submit" /></td>
-            </tr>
-        </table>
-    </form>  */
-
     @GetMapping("/login")
-    public boolean getLogin(String username, String pwd){
+    public String getLogin(String username, String pwd){
+        //confirm if we received the username and token
         User user = userRepository.findByUsername(username);
-        if (user.getPassword().equals(pwd))
-            return true;
-        return false;
+
+        if (user != null && user.getToken().equals(pwd) ){
+            //if the token is from the correct user then return true
+            return "{\"status\": true, \"token\":"+pwd+"}"; //send token for login
+        }
+
+        if (user!=null && user.getPassword().equals(pwd)){
+            //need to generate a token for the login
+            String generatedString = generateToken();
+            //
+            user.setToken(generatedString);
+            userRepository.save(user);
+            return "{\"status\": true, \"token\":"+generatedString+"}"; //send token for login
+        }
+        return "{\"status\":false,\"reason\":\"User and password incorrect\"";
     }
 
     @PostMapping("/register")
-    public boolean getRegister(String email,String username, String pwd, String confirmPwd, String phone_number){
+    public String getRegister(String email,String username, String pwd, String confirmPwd, String phone_number){
         User user0 = userRepository.findByUsername(username);
         if (user0 != null)
-            return false;
+            return "{\"status\":false,\"reason\":\"User already exists\"";
         User user1 = userRepository.findByEmail(email);
         if (user1 != null)
-            return false;
+            return "{\"status\":false,\"reason\":\"User already exists\"";
         if(pwd.equals(confirmPwd)){
             User user = new User(email,username,pwd,phone_number);
+            //need to generate a token
+            String generatedString = generateToken();
+            //
+            user.setToken(generatedString);
             userRepository.save(user);
-            return true;
+            return "{\"status\":true, \"token\":"+generatedString+"}";
         }
-        return false;
+        return "{\"status\":false,\"reason\":\"Register not successfull\"";
+    }
+
+
+
+    private String generateToken(){
+        //need to generate a token for the login
+        int leftLimit = 48; // numeral '0'
+        int rightLimit = 122; // letter 'z'
+        int targetStringLength = 16;
+        Random random = new Random();
+
+        String generatedString = random.ints(leftLimit, rightLimit + 1)
+        .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+        .limit(targetStringLength)
+        .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+        .toString();
+
+        return generatedString;
+        //
     }
 }
