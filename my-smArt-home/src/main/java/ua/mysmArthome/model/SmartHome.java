@@ -1,33 +1,40 @@
 package ua.mysmArthome.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 
 @Entity
-@Table(name = "User")
+@Table(name = "SmartHome")
 public class SmartHome {
-    
+    private int id;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
-
-    @OneToMany(mappedBy = "User")
-    @Column(name = "id_User", nullable = false)
-    private int id_User;
-
-    
     public int getId() {
         return id;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
   
-    public int getIdUser() {
-        return id_User;
+    @OneToOne
+    @JoinColumn(name="admin_id")
+    private Admin admin;
+
+    public Admin getAdmin() {
+        return admin;
     }
 
+    public void setAdmin(Admin admin) {
+        this.admin = admin;
+    }
+    
+    
 }

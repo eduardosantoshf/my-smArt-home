@@ -2,60 +2,58 @@ package ua.mysmArthome.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "Device")
 public class Device {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
 
-    @Column(name = "name", nullable = false)
+    private int id;
     private String name; //name of the device
 
-    @Column(name = "type", nullable = false)
-    private String type; //type of the device
-
-    @Column(name = "status", nullable = false)
-    private boolean status=false; //indicates if its on or off
-
-    public Device(){}
-
-    public Device(String name){
-        this.name=name;
+    public Device() {
     }
-    
+
+    public Device(String name) {
+        this.name = name;
+    }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getId() {
         return id;
     }
-    
-    public String getName() {
-        return name;
+
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getType(){
-        return type;
+    @Column(name = "name", nullable = false)
+    public String getName() {
+        return name;
     }
 
     public void setName(String name) {
         //change the name of the device
         this.name = name;
     }
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="smartHome_id")
+    private SmartHome smartHome;
 
-    public boolean getStatus() {
-        return status;
+    public SmartHome getSmartHome() {
+        return smartHome;
     }
 
-    public void changeStatus(boolean status) {
-        //turn on or off
-        if (this.status)
-            this.status=false;
-        else
-            this.status=true;
-    } 
+    public void setSmartHome(SmartHome smartHome) {
+        this.smartHome = smartHome;
+    }
+    
 }
