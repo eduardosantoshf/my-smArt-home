@@ -36,7 +36,7 @@ public class UserController {
             userRepository.save(user);
             return "{\"status\": true, \"token\":"+generatedString+"}"; //send token for login
         }
-        return "{\"status\":false,\"reason\":\"User and password incorrect\"";
+        return "{\"status\":false,\"reason\":\"User and password incorrect\"}";
     }
 
     @CrossOrigin
@@ -44,10 +44,10 @@ public class UserController {
     public String getRegister(String email,String username, String pwd, String confirmPwd, String phone_number){
         User user0 = userRepository.findByUsername(username);
         if (user0 != null)
-            return "{\"status\":false,\"reason\":\"User already exists\"";
+            return "{\"status\":false,\"reason\":\"User already exists\"}";
         User user1 = userRepository.findByEmail(email);
         if (user1 != null)
-            return "{\"status\":false,\"reason\":\"User already exists\"";
+            return "{\"status\":false,\"reason\":\"User already exists\"}";
         if(pwd.equals(confirmPwd)){
             User user = new User(email,username,pwd,phone_number);
             //need to generate a token
@@ -57,7 +57,7 @@ public class UserController {
             userRepository.save(user);
             return "{\"status\":true, \"token\":"+generatedString+"}";
         }
-        return "{\"status\":false,\"reason\":\"Register not successfull\"";
+        return "{\"status\":false,\"reason\":\"Register not successfull\"}";
     }
 
 
