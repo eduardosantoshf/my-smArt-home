@@ -2,69 +2,93 @@ package ua.mysmArthome.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "User")
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-
-    @Column(name = "email", nullable = false)
     private String email;
-
-    @Column(name = "username", nullable = false)
-    private String username;
-    
-    @Column(name = "password", nullable = false)
+    private String username;    
     private String password; //String or hash (depending on implementation might be better to use hash
-    
-    @Column(name = "phone_number", nullable = false)
-    private String phone_number;
-
-    @Column(name = "login_token", nullable = false)
-    private String ltoken;
-
+    private String phone;
+    private boolean token = false;
     public User(){}
 
     public User(String email,String username,String password, String phone_number){
         this.email=email;
         this.username=username;
         this.password=password;
-        this.phone_number = phone_number;
+        this.phone = phone_number;
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getId() {
         return id;
     }
-
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    @Column(name = "email", nullable = false)
     public String getEmail() {
         return email;
     }
+        public void setEmail(String email) {
+        this.email = email;
+    }
     
+    @Column(name = "username", nullable = false)
     public String getUsername() {
         return username;
     }
-    
-    public String getPhoneNumber() {
-        return phone_number;
+    public void setUsername(String username) {
+        this.username = username;
     }
-
-    public String getPassword() {
+    
+    @Column(name = "phone", nullable = false)
+    public String getPhone() {
+        return phone;
+    }
+    public void setPhone(String phone_number) {
+        this.phone = phone_number;
+    }
+    @Column(name="password", nullable=false)
+    public String getPassword(){
         return password;
     }
-
-    public String getToken(){
-        return ltoken;
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
+    @Column(name="token", nullable=false)
+    public boolean isToken() {
+        return token;
     }
 
-    public void setToken(String ltoken){
-        this.ltoken = ltoken;
+    public void setToken(boolean token) {
+        this.token = token;
     }
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="admin_id")
+    private Admin admin;
+    public Admin getAdmin() {
+        return admin;
+    }
+    public void setAdmin(Admin admin) {
+        this.admin = admin;
+    }
+    
+    
+    
     
 }

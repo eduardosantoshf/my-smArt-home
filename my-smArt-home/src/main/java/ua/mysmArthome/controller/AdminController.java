@@ -21,55 +21,59 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ua.mysmArthome.exception.ResourceNotFoundException;
-import ua.mysmArthome.model.User;
-import ua.mysmArthome.repository.UserRepository;
+import ua.mysmArthome.model.Admin;
+import ua.mysmArthome.repository.AdminRepository;
 
+/**
+ *
+ * @author oscar
+ */
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class AdminController {
     @Autowired
-    private UserRepository userRepository;
+    private AdminRepository userRepository;
     
     //i think the best way to find the users are username
     
     @GetMapping("/all")
-    public List<User> getAllUsers() {
+    public List<Admin> getAllUsers() {
         return userRepository.findAll();
     }
     @RequestMapping(value="/usr/{username}",method= RequestMethod.GET)
-    public ResponseEntity<User> getUserbyUsername(@PathVariable String username) throws ResourceNotFoundException {
-        User user = userRepository.findUserByUsername(username)
+    public ResponseEntity<Admin> getUserbyUsername(@PathVariable String username) throws ResourceNotFoundException {
+        Admin user = userRepository.findAdminByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User "+username+" not found"));
         return ResponseEntity.ok().body(user);
     }
     @RequestMapping(value="/email/{email}",method= RequestMethod.GET)
-    public ResponseEntity<User> getDevicebyName(@PathVariable String email) throws ResourceNotFoundException {
-        User user = userRepository.findUserByEmail(email)
+    public ResponseEntity<Admin> getDevicebyName(@PathVariable String email) throws ResourceNotFoundException {
+        Admin user = userRepository.findAdminByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User with email "+email+" not found"));
         return ResponseEntity.ok().body(user);
     }
     
     @PostMapping("/")
-    public User createUser(@Valid @RequestBody User user ){
+    public Admin createUser(@Valid @RequestBody Admin user ){
         return userRepository.save(user);
     }
     
     @PutMapping("/{username}")
-    public ResponseEntity<User> updateUsername(@PathVariable(value="username") String username,@Valid @RequestBody User userDetails)
+    public ResponseEntity<Admin> updateUsername(@PathVariable(value="username") String username,@Valid @RequestBody Admin userDetails)
         throws ResourceNotFoundException{
-        User user = userRepository.findUserByUsername(username)
+        Admin user = userRepository.findAdminByUsername(username)
                 .orElseThrow(()->new ResourceNotFoundException("User "+username+" not found"));
         user.setEmail(userDetails.getEmail());
         user.setUsername(userDetails.getUsername());
         user.setPassword(userDetails.getPassword());
         user.setPhone(userDetails.getPhone());
-        final User f_user = userRepository.save(user);
+        final Admin f_user = userRepository.save(user);
         return ResponseEntity.ok(f_user);
     }
     @DeleteMapping("/{id}")
     public Map<String, Boolean> deleteUser(@PathVariable(value = "id") String username)
          throws ResourceNotFoundException {
-        User user = userRepository.findUserByUsername(username)
+        Admin user = userRepository.findAdminByUsername(username)
        .orElseThrow(() -> new ResourceNotFoundException("User "+username+" not found"));
 
         userRepository.delete(user);

@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -61,21 +59,10 @@ public class DeviceController {
         Device device = deviceRepository.findById(deviceId)
        .orElseThrow(() -> new ResourceNotFoundException("Device not found for this id :: " + deviceId));
 
-    @CrossOrigin
-    @GetMapping("/devices")
-    public String getDevices(){
-        //get all devices
-        List<Device> devices = deviceRepository.findAll();
-        //create appropriate string for the devices
-        String devicesStr="";
-        for (int i=0; i<devices.size()-1;i++){
-            Device device = devices.get(i);
-            devicesStr+="{\"id\":\""+device.getId()+"\",\"name\":\""+device.getName()+"\"},";
-        }
-        devicesStr+="{\"id\":\""+devices.get(devices.size()-1).getId()+"\",\"name\":\""+devices.get(devices.size()-1).getName()+"\"}";
-        //
-        return "{\"devices\":["+devicesStr+"]}";
+        deviceRepository.delete(device);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", Boolean.TRUE);
+        return response;
     }
     
 }
-
