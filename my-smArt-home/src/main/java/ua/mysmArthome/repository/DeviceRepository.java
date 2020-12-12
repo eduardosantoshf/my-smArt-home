@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface DeviceRepository extends JpaRepository<Device, Long>{
     
-    List<Device> findById(int id);
+    Device findById(int id);
 
     List<Device> findByName(String name);
 

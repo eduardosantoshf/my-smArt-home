@@ -2,7 +2,7 @@ package ua.mysmArthome.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import ua.mysmArthome.model.Device;
@@ -16,18 +16,20 @@ public class DeviceController {
     @Autowired
     private DeviceRepository deviceRepository;
 
+    @CrossOrigin
     @GetMapping("/devices")
-    public void getDevices(Model model){
-        List<Device> devices = deviceRepository.findAll();
+    public String getDevices(){
         //get all devices
-        model.addAttribute("devices", devices);
-        /*<tbody>
-            <tr th:each="device: ${devices}">
-                <td th:text="${device.id}" />
-                <td th:text="${device.name}" />
-                <td th:text="${device.status}" />
-            </tr>
-        </tbody>*/ 
+        List<Device> devices = deviceRepository.findAll();
+        //create appropriate string for the devices
+        String devicesStr="";
+        for (int i=0; i<devices.size()-1;i++){
+            Device device = devices.get(i);
+            devicesStr+="{\"id\":\""+device.getId()+"\",\"name\":\""+device.getName()+"\"},";
+        }
+        devicesStr+="{\"id\":\""+devices.get(devices.size()-1).getId()+"\",\"name\":\""+devices.get(devices.size()-1).getName()+"\"}";
+        //
+        return "{\"devices\":["+devicesStr+"]}";
     }
     
 }

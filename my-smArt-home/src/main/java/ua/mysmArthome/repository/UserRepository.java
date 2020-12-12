@@ -5,8 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import ua.mysmArthome.model.User;
 
-import java.util.List;
-
 @Repository
 public interface UserRepository  extends JpaRepository<User, Long>{
     
@@ -16,5 +14,6 @@ public interface UserRepository  extends JpaRepository<User, Long>{
 
     User findByEmail(String email);
 
+    User findByToken(String token);
     
 }

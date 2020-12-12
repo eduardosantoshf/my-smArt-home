@@ -27,6 +27,9 @@ public class User {
     @Column(name = "phone_number", nullable = false)
     private String phone_number;
 
+    @Column(name = "login_token", nullable = false)
+    private String ltoken;
+
     public User(){}
 
     public User(String email,String username,String password, String phone_number){
@@ -54,6 +57,14 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getToken(){
+        return ltoken;
+    }
+
+    public void setToken(String ltoken){
+        this.ltoken = ltoken;
     }
     
 }

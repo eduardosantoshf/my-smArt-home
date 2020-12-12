@@ -1,0 +1,55 @@
+.selector-for-some-widget {
+    box-sizing: content-box;
+  }
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+  }
+
+#content{
+    flex: 1 0 auto;
+    background: #eeeeee;
+}
+
+footer{
+    flex-shrink: 0;
+}
+
+.jumbotron{
+  background: rgb(255,255,255);
+  background: linear-gradient(90deg, rgba(255,255,255,1) 100%, rgba(78,183,255,0.846673703661152) 100%);
+  color: #007bff;
+}
+
+.card{
+  background: #ffffff;
+  color: black;
+  padding: 1.5rem; 
+}
+
+#card-link{
+  display:inline-block;
+  text-decoration: none;
+  font-weight: 400;
+}
+
+#card-link:after {
+  display: block;
+  left: 0;
+  bottom: -10px;
+  width: 0;
+  height: 2px;
+  background-color: #31a8e4;
+  content: "";
+  transition: width 0.2s;
+}
+
+#card-link:hover:after{
+  width: 100%;
+}
