@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package ua.mysmArthome.controller;
 
 import java.util.Random;
@@ -10,10 +15,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import ua.mysmArthome.repository.UserRepository;
 import ua.mysmArthome.model.User;
+import ua.mysmArthome.repository.UserRepository;
 
-@Controller
+@RestController
+@RequestMapping("/user")
 public class UserController {
-    
     @Autowired
     private UserRepository userRepository;
 
@@ -37,7 +43,48 @@ public class UserController {
             return "{\"status\": true, \"token\":"+generatedString+"}"; //send token for login
         }
         return "{\"status\":false,\"reason\":\"User and password incorrect\"";
+    
+    //i think the best way to find the users are username
+    
+    @GetMapping("/all")
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
+    @RequestMapping(value="/usr/{username}",method= RequestMethod.GET)
+    public ResponseEntity<User> getUserbyUsername(@PathVariable String username) throws ResourceNotFoundException {
+        User user = userRepository.findUserByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User "+username+" not found"));
+        return ResponseEntity.ok().body(user);
+    }
+    @RequestMapping(value="/email/{email}",method= RequestMethod.GET)
+    public ResponseEntity<User> getDevicebyName(@PathVariable String email) throws ResourceNotFoundException {
+        User user = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User with email "+email+" not found"));
+        return ResponseEntity.ok().body(user);
+    }
+    
+    @PostMapping("/")
+    public User createUser(@Valid @RequestBody User user ){
+        return userRepository.save(user);
+    }
+    
+    @PutMapping("/{username}")
+    public ResponseEntity<User> updateUsername(@PathVariable(value="username") String username,@Valid @RequestBody User userDetails)
+        throws ResourceNotFoundException{
+        User user = userRepository.findUserByUsername(username)
+                .orElseThrow(()->new ResourceNotFoundException("User "+username+" not found"));
+        user.setEmail(userDetails.getEmail());
+        user.setUsername(userDetails.getUsername());
+        user.setPassword(userDetails.getPassword());
+        user.setPhone(userDetails.getPhone());
+        final User f_user = userRepository.save(user);
+        return ResponseEntity.ok(f_user);
+    }
+    @DeleteMapping("/{id}")
+    public Map<String, Boolean> deleteUser(@PathVariable(value = "id") String username)
+         throws ResourceNotFoundException {
+        User user = userRepository.findUserByUsername(username)
+       .orElseThrow(() -> new ResourceNotFoundException("User "+username+" not found"));
 
     @CrossOrigin
     @PostMapping("/register")
@@ -78,4 +125,5 @@ public class UserController {
         return generatedString;
         //
     }
+
 }
