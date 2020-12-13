@@ -86,6 +86,8 @@ class TapoController():
             errorCode = ast.literal_eval(decryptedResponse)["error_code"]
             errorMessage = p100.errorCodes[str(errorCode)]
 
+# tests
+#
 #tc=TapoController()
 #tc.hardCheck() # pesquisa em toda a rede
 #tc.checkDevice("192.168.0.106") # verifica o tipo do dispositivo (BULB ou PLUG)
