@@ -17,8 +17,9 @@ public class Producer {
 
                 String message = argv.length < 1 ? "info: Hello World!" : String.join(" ", argv);
 
-                channel.basicPublish( "logs", "", null, message.getBytes());
+                channel.basicPublish( "logs", "", null, message.getBytes()); //change routing key for each device
                 System.out.println(" [x] Sent '" + message + "'");
         }
     }
+
 }
