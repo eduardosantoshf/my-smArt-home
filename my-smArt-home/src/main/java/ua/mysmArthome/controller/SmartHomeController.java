@@ -42,4 +42,3 @@ public class SmartHomeController {
         return ResponseEntity.ok().body(smartHome);
     }
 }
-
