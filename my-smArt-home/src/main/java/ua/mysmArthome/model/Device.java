@@ -53,5 +53,10 @@ public class Device {
     public void setSmarthome(SmartHome smarthome) {
         this.smarthome = smarthome;
     }
+
+    @Override
+    public String toString() {
+        return "Device{" + "id=" + id + ", name=" + name + ", smarthome=" + smarthome + '}';
+    }
     
 }

@@ -36,6 +36,18 @@ public class Admin {
         this.id = id;
     }
 
+    public Admin(int id, String username, String email, String password, String phone) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.phone = phone;
+    }
+
+    public Admin() {
+    }
+
+    
     @Column(name = "name", nullable = false)
     public String getUsername() {
         return username;
@@ -88,6 +100,11 @@ public class Admin {
 
     public void setUsers(List<User> users) {
         this.users = users;
+    }
+
+    @Override
+    public String toString() {
+        return "Admin{" + "id=" + id + ", username=" + username + ", email=" + email + ", password=" + password + ", phone=" + phone + ", token=" + token + ", users=" + users + '}';
     }
     
     

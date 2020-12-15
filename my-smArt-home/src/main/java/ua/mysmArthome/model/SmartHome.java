@@ -1,5 +1,6 @@
 package ua.mysmArthome.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,8 +18,6 @@ public class SmartHome {
     private int id;
     private Admin admin;
     private List<Device> list_devices;
-
-    //private Admin admin;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public int getId() {
@@ -42,6 +41,7 @@ public class SmartHome {
     }
 
     @OneToMany(mappedBy = "smarthome")
+    @JsonIgnore
     public List<Device> getList_devices() {
         return list_devices;
     }
@@ -49,6 +49,13 @@ public class SmartHome {
     public void setList_devices(List<Device> list_devices) {
         this.list_devices = list_devices;
     }
+
+    @Override
+    public String toString() {
+        return "SmartHome{" + "id=" + id + ", admin=" + admin + ", list_devices=" + list_devices + '}';
+    }
+    
+    
     
     
 }

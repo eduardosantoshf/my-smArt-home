@@ -1,5 +1,6 @@
 package ua.mysmArthome.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -82,6 +83,7 @@ public class User {
     }
     @ManyToOne(cascade = {CascadeType.ALL},fetch=FetchType.LAZY, optional = false)
     @JoinColumn(name="admin_id",nullable = false)
+    @JsonIgnore
     public Admin getAdmin() {
         return admin;
     }
