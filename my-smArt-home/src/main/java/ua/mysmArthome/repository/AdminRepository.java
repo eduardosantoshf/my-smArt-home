@@ -18,12 +18,12 @@ import ua.mysmArthome.model.Admin;
  */
 @Repository
 public interface AdminRepository extends JpaRepository<Admin, Integer>{
-    @Query("Select t from User t where t.id=:id")
+    @Query("Select t from Admin t where t.id=:id")
     Optional<Admin> findAdminById(@Param("id") int id);
     
-    @Query("Select t from User t where t.username=:username")
+    @Query("Select t from Admin t where t.username=:username")
     Optional<Admin> findAdminByUsername(@Param("username") String username);
     
-    @Query("Select t from User t where t.email=:email")
+    @Query("Select t from Admin t where t.email=:email")
     Optional<Admin> findAdminByEmail(@Param("email") String email);
 }

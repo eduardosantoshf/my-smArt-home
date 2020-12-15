@@ -8,9 +8,6 @@ package ua.mysmArthome.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ua.mysmArthome.exception.ResourceNotFoundException;
-import ua.mysmArthome.model.Admin;
 import ua.mysmArthome.model.User;
+import ua.mysmArthome.repository.AdminRepository;
 import ua.mysmArthome.repository.UserRepository;
 
 @RestController
@@ -34,6 +31,8 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
     
+    @Autowired
+    private AdminRepository adminRepostiory;
     //i think the best way to find the users are username
     
     @GetMapping("/all")
@@ -53,18 +52,18 @@ public class UserController {
         return ResponseEntity.ok().body(user);
     }
     @RequestMapping(value="/admin/{id}",method= RequestMethod.GET)
-    public ResponseEntity<User> getUserByAdminId(@PathVariable int id) throws ResourceNotFoundException {
-        User user = userRepository.findUserByAdminId(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Admin "+id+" in charge of User not found"));
-        return ResponseEntity.ok().body(user);
+    public List<User> getUserByAdminId(@PathVariable int id) throws ResourceNotFoundException {
+        if(adminRepostiory.findAdminById(id).isEmpty()){
+            throw new ResourceNotFoundException("Not Found");
+        }
+        return userRepository.findUserByAdminId(id);
     }
-    @PostMapping("/{id}")
-    public User createUser(@PathVariable(value="id") int id_admin,@Valid @RequestBody User user) throws ResourceNotFoundException{
-        AdminController c = new AdminController();
-        Admin admin = c.getUserRepository().findAdminById(id_admin)
-                .orElseThrow(() -> new ResourceNotFoundException("User "+id_admin+" not found"));
-        user.setAdmin(admin);
-        return userRepository.save(user);
+    @PostMapping("/post/{id_admin}/user")
+    public User createUser(@PathVariable int id_admin,@Valid @RequestBody User user) throws ResourceNotFoundException{
+        return adminRepostiory.findById(id_admin).map(admin->{
+            user.setAdmin(admin);
+            return userRepository.save(user);
+        }).orElseThrow(()-> new ResourceNotFoundException("Error"));
     }
     
     @PutMapping("/{username}")
@@ -89,6 +88,10 @@ public class UserController {
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return response;
+    }
+    @DeleteMapping("/delete")
+    public void deleteAll(){
+        userRepository.deleteAll();
     }
 
 }

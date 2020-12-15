@@ -31,18 +31,6 @@ public class SmartHome {
 
     public SmartHome() {
     }
-    
-    
-    /*@OneToMany(mappedBy = "smarthome")
-    private List<Device> list_devices;
-
-    /*public List<Device> getList_devices() {
-        return list_devices;
-    }
-
-    public void setList_devices(List<Device> list_devices) {
-        this.list_devices = list_devices;
-    }*/
     @OneToOne
     @JoinColumn(name = "admin_id")
     public Admin getAdmin() {

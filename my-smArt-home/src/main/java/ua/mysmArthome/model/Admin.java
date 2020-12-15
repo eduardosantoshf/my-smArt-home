@@ -6,18 +6,16 @@
 package ua.mysmArthome.model;
 
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-/**
- *
- * @author oscar
- */
 @Entity
 @Table(name="Admin")
 public class Admin {
@@ -83,7 +81,7 @@ public class Admin {
         this.token = token;
     }
     
-    @OneToMany(mappedBy = "admin")
+    @OneToMany(mappedBy = "admin",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     public List<User> getUsers() {
         return users;
     }

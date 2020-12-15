@@ -33,7 +33,15 @@ import ua.mysmArthome.repository.AdminRepository;
 public class AdminController {
     @Autowired
     private AdminRepository userRepository;
+
+    /*public AdminController() {
+    }*/
     
+    public Admin findAdminById(int id) throws ResourceNotFoundException {
+        Admin user = userRepository.findAdminById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User "+id+" not found"));
+        return user;
+    }
     //i think the best way to find the users are username
     
     @GetMapping("/all")
@@ -46,7 +54,7 @@ public class AdminController {
                 .orElseThrow(() -> new ResourceNotFoundException("User "+id+" not found"));
         return ResponseEntity.ok().body(user);
     }
-    @RequestMapping(value="/{username}",method= RequestMethod.GET)
+    @RequestMapping(value="/username/{username}",method= RequestMethod.GET)
     public ResponseEntity<Admin> getAdminbyUsername(@PathVariable String username) throws ResourceNotFoundException {
         Admin user = userRepository.findAdminByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User "+username+" not found"));
@@ -91,5 +99,9 @@ public class AdminController {
     public AdminRepository getUserRepository() {
         return userRepository;
     }
-
+    
+    @DeleteMapping("/delete")
+    public void deleteAll(){
+        userRepository.deleteAll();
+    }
 }
