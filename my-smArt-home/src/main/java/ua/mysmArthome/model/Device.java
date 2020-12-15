@@ -2,7 +2,6 @@ package ua.mysmArthome.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,7 +15,7 @@ public class Device {
 
     private int id;
     private String name; //name of the device
-
+    private SmartHome smarthome;
     public Device() {
     }
 
@@ -43,17 +42,16 @@ public class Device {
         //change the name of the device
         this.name = name;
     }
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="smartHome_id")
-    private SmartHome smartHome;
 
-    public SmartHome getSmartHome() {
-        return smartHome;
+    @ManyToOne
+    @JoinColumn(name="smartHome_id")
+
+    public SmartHome getSmarthome() {
+        return smarthome;
     }
 
-    public void setSmartHome(SmartHome smartHome) {
-        this.smartHome = smartHome;
+    public void setSmarthome(SmartHome smarthome) {
+        this.smarthome = smarthome;
     }
     
 }

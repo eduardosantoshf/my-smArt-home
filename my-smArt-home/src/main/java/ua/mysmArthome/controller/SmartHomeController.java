@@ -30,7 +30,7 @@ public class SmartHomeController {
     }
     @RequestMapping(value="/admin/{id}",method= RequestMethod.GET)
     public ResponseEntity<SmartHome> getSmartHomebyAdmin(@PathVariable int id) throws ResourceNotFoundException {
-        SmartHome smartHome = smartHomeRepository.findSmartHomebyAdmin(id)
+        SmartHome smartHome = smartHomeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Admin "+id+" not found in SmartHome"));
         return ResponseEntity.ok().body(smartHome);
     }

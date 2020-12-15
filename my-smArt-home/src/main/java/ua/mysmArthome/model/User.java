@@ -2,7 +2,6 @@ package ua.mysmArthome.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,6 +19,8 @@ public class User {
     private String password; //String or hash (depending on implementation might be better to use hash
     private String phone;
     private boolean token = false;
+    
+    private Admin admin;
     public User(){}
 
     public User(String email,String username,String password, String phone_number){
@@ -77,16 +78,16 @@ public class User {
     public void setToken(boolean token) {
         this.token = token;
     }
-    
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name="admin_id")
-    private Admin admin;
     public Admin getAdmin() {
         return admin;
     }
+
     public void setAdmin(Admin admin) {
         this.admin = admin;
     }
+    
     
     
     

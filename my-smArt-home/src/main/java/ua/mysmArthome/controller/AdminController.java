@@ -29,7 +29,7 @@ import ua.mysmArthome.repository.AdminRepository;
  * @author oscar
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/admin")
 public class AdminController {
     @Autowired
     private AdminRepository userRepository;

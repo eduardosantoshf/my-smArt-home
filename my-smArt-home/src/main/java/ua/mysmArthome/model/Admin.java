@@ -82,15 +82,16 @@ public class Admin {
         this.token = token;
     }
     
-    @OneToMany(mappedBy = "user")
-    private List<User> adminUsersList;  
-
-    public List<User> getAdminUsersList() {
-        return adminUsersList;
+    @OneToMany(mappedBy = "admin")
+    private List<User> users;
+    ///DON´T PUT GETTERS
+    /*public List<User> getUsers() {
+        return users;
     }
 
-    public void setAdminUsersList(List<User> adminUsersList) {
-        this.adminUsersList = adminUsersList;
-    }
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }*/
+    
     
 }
