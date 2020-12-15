@@ -27,6 +27,7 @@ public class Admin {
     private String password;
     private String phone;
     private boolean token = false;
+    private List<User> users;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public int getId() {
@@ -83,15 +84,13 @@ public class Admin {
     }
     
     @OneToMany(mappedBy = "admin")
-    private List<User> users;
-    ///DON´T PUT GETTERS
-    /*public List<User> getUsers() {
+    public List<User> getUsers() {
         return users;
     }
 
     public void setUsers(List<User> users) {
         this.users = users;
-    }*/
+    }
     
     
 }

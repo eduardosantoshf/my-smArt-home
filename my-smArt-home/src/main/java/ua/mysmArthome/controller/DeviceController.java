@@ -37,6 +37,13 @@ public class DeviceController {
         return ResponseEntity.ok().body(device);
     }
     
+    @RequestMapping(value="/shome/{id}",method= RequestMethod.GET)
+    public ResponseEntity<Device> getDevicebySmartHomeId(@PathVariable int id) throws ResourceNotFoundException {
+        Device device = deviceRepository.findDevicesBySmartHomeId(id)
+                .orElseThrow(() -> new ResourceNotFoundException("SmartHome "+id+" not found"));
+        return ResponseEntity.ok().body(device);
+    }
+    
     @PostMapping("/")
     public Device createDevice(@Valid @RequestBody Device device ){
         return deviceRepository.save(device);

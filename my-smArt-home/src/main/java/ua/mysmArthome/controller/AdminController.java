@@ -37,29 +37,35 @@ public class AdminController {
     //i think the best way to find the users are username
     
     @GetMapping("/all")
-    public List<Admin> getAllUsers() {
+    public List<Admin> getAllAdmins() {
         return userRepository.findAll();
     }
-    @RequestMapping(value="/usr/{username}",method= RequestMethod.GET)
-    public ResponseEntity<Admin> getUserbyUsername(@PathVariable String username) throws ResourceNotFoundException {
+    @RequestMapping(value="/{id}",method= RequestMethod.GET)
+    public ResponseEntity<Admin> getAdminbyId(@PathVariable int id) throws ResourceNotFoundException {
+        Admin user = userRepository.findAdminById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User "+id+" not found"));
+        return ResponseEntity.ok().body(user);
+    }
+    @RequestMapping(value="/{username}",method= RequestMethod.GET)
+    public ResponseEntity<Admin> getAdminbyUsername(@PathVariable String username) throws ResourceNotFoundException {
         Admin user = userRepository.findAdminByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User "+username+" not found"));
         return ResponseEntity.ok().body(user);
     }
     @RequestMapping(value="/email/{email}",method= RequestMethod.GET)
-    public ResponseEntity<Admin> getDevicebyName(@PathVariable String email) throws ResourceNotFoundException {
+    public ResponseEntity<Admin> getAdminByEmail(@PathVariable String email) throws ResourceNotFoundException {
         Admin user = userRepository.findAdminByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User with email "+email+" not found"));
         return ResponseEntity.ok().body(user);
     }
     
     @PostMapping("/")
-    public Admin createUser(@Valid @RequestBody Admin user ){
+    public Admin createAdmin(@Valid @RequestBody Admin user ){
         return userRepository.save(user);
     }
     
     @PutMapping("/{username}")
-    public ResponseEntity<Admin> updateUsername(@PathVariable(value="username") String username,@Valid @RequestBody Admin userDetails)
+    public ResponseEntity<Admin> updateAdmin(@PathVariable(value="username") String username,@Valid @RequestBody Admin userDetails)
         throws ResourceNotFoundException{
         Admin user = userRepository.findAdminByUsername(username)
                 .orElseThrow(()->new ResourceNotFoundException("User "+username+" not found"));
@@ -71,7 +77,7 @@ public class AdminController {
         return ResponseEntity.ok(f_user);
     }
     @DeleteMapping("/{id}")
-    public Map<String, Boolean> deleteUser(@PathVariable(value = "id") String username)
+    public Map<String, Boolean> deleteAdmin(@PathVariable(value = "id") String username)
          throws ResourceNotFoundException {
         Admin user = userRepository.findAdminByUsername(username)
        .orElseThrow(() -> new ResourceNotFoundException("User "+username+" not found"));
@@ -80,6 +86,10 @@ public class AdminController {
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return response;
+    }
+
+    public AdminRepository getUserRepository() {
+        return userRepository;
     }
 
 }
