@@ -31,12 +31,16 @@ class VirtualController():
         return None
 
     def turnOn(self, id):
-        devices[id]={"status":"turned-On", "id_":devices[ip].id_, "type_":devices[ip].type_}
-        #send data
+        if id not in self.devices:
+            return None
+        self.devices[id]["status"]="turned-On"
+        return True
 
     def turnOff(self, id):
-        devices[id]={"status":"turned-Off", "id_":devices[ip].id_, "type_":devices[ip].type_}
-        #send data
+        if id not in self.devices:
+            return None
+        self.devices[id]["status"]="turned-Off"
+        return True
 
     def setBrightness(self, id, brightness):
         #send data
@@ -49,32 +53,43 @@ class VirtualController():
     
     #properties
     def status(self, id):
-        print(self.devices[id])
-        return self.devices[id].status
+        if id not in self.devices:
+            return None
+        return self.devices[id]["status"]
     def humidity(self, id):
-        if self.devices[id].type_=="humidity":
+        if id not in self.devices:
+            return None
+        if self.devices[id]["type_"]=="humidity":
             device_humidity=random.random()*100
             return device_humidity
         return None
     def temperature(self, id):
-        if self.devices[id].type_=="termal":
+        if id not in self.devices:
+            return None
+        if self.devices[id]["type_"]=="termal":
             device_temperature=random.random()*30
             return device_temperature
         return None
     def proximity(self, id):
-        if self.devices[id].type_=="proximity":
+        if id not in self.devices:
+            return None
+        if self.devices[id]["type_"]=="proximity":
             device_proximity=random.random()*10
             return device_proximity
         return None
     def ringing(self, id):
-        if self.devices[id].type_=="door" or self.devices[id].type_=="alarm":
+        if id not in self.devices:
+            return None
+        if self.devices[id]["type_"]=="door" or self.devices[id]["type_"]=="alarm":
             isRinging=random.random()
             if isRinging>0.5:
                 return True
             return False
         return None
     def brightness(self, id):
-        if self.devices[id].type_=="light":
+        if id not in self.devices:
+            return None
+        if self.devices[id]["type_"]=="light":
             device_brightness=random.random()*100
             return device_brightness
         return None

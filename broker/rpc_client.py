@@ -23,6 +23,8 @@ class FibonacciRpcClient(object):
             self.response = body
 
     def call(self, n):
+        obj='{"op":"turnOff", "id":"4389807513594906.5"}'
+        #obj='{"op":"hardcheck"}'
         self.response = None
         self.corr_id = str(uuid.uuid4())
         self.channel.basic_publish(
@@ -32,7 +34,7 @@ class FibonacciRpcClient(object):
                 reply_to=self.callback_queue,
                 correlation_id=self.corr_id,
             ),
-            body='{"op":"get", "property":"status", "id":"2690480715221260.5"}')
+            body=obj)
         while self.response is None:
             self.connection.process_data_events()
         return self.response
