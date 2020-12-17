@@ -19,7 +19,7 @@ public class User {
     private String username;    
     private String password; //String or hash (depending on implementation might be better to use hash
     private String phone;
-    private boolean token = false;
+    private String token;
     public User(){}
 
     public User(String email,String username,String password, String phone_number){
@@ -70,11 +70,11 @@ public class User {
     }
     
     @Column(name="token", nullable=false)
-    public boolean isToken() {
+    public String getToken() {
         return token;
     }
 
-    public void setToken(boolean token) {
+    public void setToken(String token) {
         this.token = token;
     }
     
