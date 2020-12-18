@@ -33,9 +33,6 @@ import ua.mysmArthome.repository.AdminRepository;
 public class AdminController {
     @Autowired
     private AdminRepository userRepository;
-
-    /*public AdminController() {
-    }*/
     
     public Admin findAdminById(int id) throws ResourceNotFoundException {
         Admin user = userRepository.findAdminById(id)

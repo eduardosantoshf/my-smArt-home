@@ -68,11 +68,6 @@ public class UserController {
 
     @PostMapping("/post/{id_admin}/user")
     public void createUser(@PathVariable int id_admin, @Valid @RequestBody User user) throws ResourceNotFoundException {
-        /*adminRepostiory.findById(id_admin).map(admin->{
-            user.setAdmin(admin);
-            return userRepository.save(user);
-        }).orElseThrow(()-> new ResourceNotFoundException("Error"));*/
-
         System.out.println(this.getRegister(user.getEmail(), user.getUsername(), user.getPassword(), "password", user.getPhone(),
                 adminRepostiory.findById(id_admin).get()));
     }
@@ -110,9 +105,6 @@ public class UserController {
     @CrossOrigin
     @GetMapping("/login")
     public String getLogin(String username, String pwd) throws ResourceNotFoundException {
-        //confirm if we received the username and token
-        /*User user = userRepository.findUserByUsername(username)
-       .orElseThrow(() -> new ResourceNotFoundException("User "+username+" not found"));*/
 
         if (userRepository.findUserByUsername(username).isPresent()) {
             User user = userRepository.findUserByUsername(username).get();
@@ -136,20 +128,14 @@ public class UserController {
     @CrossOrigin
     @PostMapping("/register")
     public String getRegister(String email, String username, String pwd, String confirmPwd, String phone_number, Admin admin) throws ResourceNotFoundException {
-        //.orElseThrow(() -> new ResourceNotFoundException("User "+username+" not found"));
         if (userRepository.findUserByUsername(username).isPresent()) {
             return "{\"status\":false,\"reason\":\"User already exists\"}";
         }
-        /*User user1 = userRepository.findUserByEmail(email)
-        .orElseThrow(() -> new ResourceNotFoundException("User with email "+email+" not found"));*/
-        /*if (user1 != null)
-            return "{\"status\":false,\"reason\":\"User already exists\"}"*/;
         if (pwd.equals(confirmPwd)) {
             User user = new User(email, username, pwd, phone_number);
             user.setAdmin(admin);
             //need to generate a token
             String generatedString = generateToken();
-            System.out.println(generatedString.length());
             //
             user.setToken(generatedString);
             userRepository.save(user);
@@ -170,7 +156,6 @@ public class UserController {
                 .limit(targetStringLength)
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
-
         return generatedString;
         //
     }

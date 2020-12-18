@@ -21,7 +21,7 @@ public class User {
     private String username;
     private String password; //String or hash (depending on implementation might be better to use hash
     private String phone;
-    private String token = new String();
+    private String token;
 
     private Admin admin = new Admin();
 
@@ -83,10 +83,11 @@ public class User {
         this.password = password;
     }
 
-    @Column(name = "token", nullable = false)
+    @Column(name = "token",nullable = false)
     public String getToken() {
         return token;
     }
+
     public void setToken(String token) {
         this.token = token;
     }
