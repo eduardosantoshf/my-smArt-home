@@ -24,7 +24,7 @@ public class Admin {
     private String email;
     private String password;
     private String phone;
-    private boolean token = false;
+    private String token;
     private List<User> users;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -85,11 +85,11 @@ public class Admin {
     }
     
     @Column(name="token", nullable=false)
-    public boolean isToken() {
+    public String getToken() {
         return token;
     }
 
-    public void setToken(boolean token) {
+    public void setToken(String token) {
         this.token = token;
     }
     

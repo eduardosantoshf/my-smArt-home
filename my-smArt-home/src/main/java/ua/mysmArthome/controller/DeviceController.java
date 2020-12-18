@@ -81,4 +81,9 @@ public class DeviceController {
         return response;
     }
     
+    @DeleteMapping("/delete")
+    public void deleteAll(){
+        deviceRepository.deleteAll();
+    }
+    
 }
