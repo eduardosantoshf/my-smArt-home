@@ -1,0 +1,34 @@
+version: '3.3'
+
+services:
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'db'
+      MYSQL_USER: 'user'
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+    - '3306:3306'
+    expose:
+    # opens port 3306 on the container
+    - '3306'
+    volumes: # were our data will be stored
+    - my-db:/var/lib/mysql
+  
+  rabbitmq:
+    image: rabbit:3-managment
+    hostname: my-rabbit
+    volumes:
+      #- ./rabbitmq/etc/definitions.json:/etc/rabbitmq/definitions.json
+      - ./rabbitmq/etc/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - ./rabbitmq/data:/var/lib/rabbitmq/mnesia/rabbit@my-rabbit
+      - ./rabbitmq/logs:/var/log/rabbitmq/log
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+
+
+volumes:
+  my-db: # names our volume
+  #rabbitmq
