@@ -11,10 +11,24 @@ services:
     ports:
     - '3306:3306'
     expose:
+    # opens port 3306 on the container
     - '3306'
-    volumes:
+    volumes: # were our data will be stored
     - my-db:/var/lib/mysql
+  
+  rabbitmq:
+    image: rabbit:3-managment
+    hostname: my-rabbit
+    volumes:
+      #- ./rabbitmq/etc/definitions.json:/etc/rabbitmq/definitions.json
+      - ./rabbitmq/etc/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - ./rabbitmq/data:/var/lib/rabbitmq/mnesia/rabbit@my-rabbit
+      - ./rabbitmq/logs:/var/log/rabbitmq/log
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+
 
 volumes:
-  my-db:
-
+  my-db: # names our volume
+  #rabbitmq
