@@ -6,18 +6,16 @@
 package ua.mysmArthome.model;
 
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-/**
- *
- * @author oscar
- */
 @Entity
 @Table(name="Admin")
 public class Admin {
@@ -26,7 +24,8 @@ public class Admin {
     private String email;
     private String password;
     private String phone;
-    private boolean token = false;
+    private String token="";
+    private List<User> users;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public int getId() {
@@ -37,6 +36,18 @@ public class Admin {
         this.id = id;
     }
 
+    public Admin(int id, String username, String email, String password, String phone) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.phone = phone;
+    }
+
+    public Admin() {
+    }
+
+    
     @Column(name = "name", nullable = false)
     public String getUsername() {
         return username;
@@ -74,23 +85,27 @@ public class Admin {
     }
     
     @Column(name="token", nullable=false)
-    public boolean isToken() {
+    public String getToken() {
         return token;
     }
 
-    public void setToken(boolean token) {
+    public void setToken(String token) {
         this.token = token;
     }
     
-    @OneToMany(mappedBy = "user")
-    private List<User> adminUsersList;  
-
-    public List<User> getAdminUsersList() {
-        return adminUsersList;
+    @OneToMany(mappedBy = "admin",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    public List<User> getUsers() {
+        return users;
     }
 
-    public void setAdminUsersList(List<User> adminUsersList) {
-        this.adminUsersList = adminUsersList;
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
+
+    @Override
+    public String toString() {
+        return "Admin{" + "id=" + id + ", username=" + username + ", email=" + email + ", password=" + password + ", phone=" + phone + ", token=" + token + ", users=" + users + '}';
+    }
+    
     
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ua.mysmArthome.exception.ResourceNotFoundException;
 import ua.mysmArthome.model.Device;
 import ua.mysmArthome.repository.DeviceRepository;
+import ua.mysmArthome.repository.SmartHomeRepository;
 
 @RestController
 @RequestMapping("/device")
@@ -24,10 +25,15 @@ public class DeviceController {
     @Autowired
     private DeviceRepository deviceRepository;
     
+    @Autowired
+    private SmartHomeRepository smartHomeRepository;
+    
+    
     @GetMapping("/{id}")
     public ResponseEntity<Device> getDevicebyId(@PathVariable(value="id") int id) throws ResourceNotFoundException {
-        Device device = deviceRepository.findDeviceById(id)
+        Device device = deviceRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Device "+id+" not found"));
+        System.out.println(device.getSmarthome().getAdmin().getUsername());
         return ResponseEntity.ok().body(device);
     }
     @RequestMapping(value="/name/{name}",method= RequestMethod.GET)
@@ -37,9 +43,19 @@ public class DeviceController {
         return ResponseEntity.ok().body(device);
     }
     
-    @PostMapping("/")
-    public Device createDevice(@Valid @RequestBody Device device ){
-        return deviceRepository.save(device);
+    @RequestMapping(value="/shome/{id}",method= RequestMethod.GET)
+    public ResponseEntity<Device> getDevicebySmartHomeId(@PathVariable int id) throws ResourceNotFoundException {
+        Device device = deviceRepository.findDevicesBySmartHomeId(id)
+                .orElseThrow(() -> new ResourceNotFoundException("SmartHome "+id+" not found"));
+        return ResponseEntity.ok().body(device);
+    }
+    
+    @PostMapping("/post/{id_home}")
+    public Device createDevice(@PathVariable int id_home,@Valid @RequestBody Device device) throws ResourceNotFoundException{
+        return smartHomeRepository.findById(id_home).map(home->{
+            device.setSmarthome(home);
+            return deviceRepository.save(device);
+        }).orElseThrow(()-> new ResourceNotFoundException("Error"));
     }
     
     @PutMapping("/{id}")
@@ -63,6 +79,11 @@ public class DeviceController {
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return response;
+    }
+    
+    @DeleteMapping("/delete")
+    public void deleteAll(){
+        deviceRepository.deleteAll();
     }
     
 }
