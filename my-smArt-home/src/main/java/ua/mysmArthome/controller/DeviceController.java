@@ -1,6 +1,7 @@
 package ua.mysmArthome.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,17 +18,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ua.mysmArthome.exception.ResourceNotFoundException;
 import ua.mysmArthome.model.Device;
+import ua.mysmArthome.rabbitmq.producer.RpcProducer;
 import ua.mysmArthome.repository.DeviceRepository;
 import ua.mysmArthome.repository.SmartHomeRepository;
 
 @RestController
 @RequestMapping("/device")
-public class DeviceController {
+public class DeviceController{
     @Autowired
     private DeviceRepository deviceRepository;
     
     @Autowired
     private SmartHomeRepository smartHomeRepository;
+
+    private RpcProducer producer = new RpcProducer();
     
     
     @GetMapping("/{id}")
@@ -50,8 +55,8 @@ public class DeviceController {
         return ResponseEntity.ok().body(device);
     }
     
-    @PostMapping("/post/{id_home}")
-    public Device createDevice(@PathVariable int id_home,@Valid @RequestBody Device device) throws ResourceNotFoundException{
+    @PostMapping("/post/{device}/{id_home}")
+    public Device createDevice(@PathVariable int id_home,@PathVariable(value="device") Device device) throws ResourceNotFoundException{
         return smartHomeRepository.findById(id_home).map(home->{
             device.setSmarthome(home);
             return deviceRepository.save(device);
@@ -85,5 +90,47 @@ public class DeviceController {
     public void deleteAll(){
         deviceRepository.deleteAll();
     }
+
+    @CrossOrigin
+    @GetMapping("/alldevices")
+    public String getDevices(){
+        //get all devices
+        List<Device> devices = deviceRepository.findAll();
+        //create appropriate string for the devices
+        String devicesStr="";
+        for (int i=0; i<devices.size()-1;i++){
+            Device device = devices.get(i);
+            devicesStr+="{\"id\":\""+device.getId()+"\",\"name\":\""+device.getName()+"\"},";
+        }
+        devicesStr+="{\"id\":\""+devices.get(devices.size()-1).getId()+"\",\"name\":\""+devices.get(devices.size()-1).getName()+"\"}";
+        //
+        return "{\"devices\":["+devicesStr+"]}";
+
+        //return producer.createMessage("");
+        
+    }
     
+    @CrossOrigin
+    @PostMapping("/turnOn/{id}")
+    public String turnOnDevice(@PathVariable(value = "id") String deviceId){
+        return producer.createMessage("turnOn",deviceId);
+    }
+
+    @CrossOrigin
+    @PostMapping("/turnOff/{id}")
+    public String turnOffDevice(@PathVariable(value = "id") String deviceId){
+        return producer.createMessage("turnOff",deviceId);
+    }
+
+    @CrossOrigin
+    @GetMapping("/brightness/{id}")
+    public String BrightnessOfDevice(@PathVariable(value = "id") String deviceId){
+        return producer.createMessage("brightness",deviceId); //right now brightness is random
+    }
+
+    @CrossOrigin
+    @GetMapping("/{property}/{id}")
+    public String DeviceProperty(@PathVariable(value = "property") String deviceProperty,@PathVariable(value = "id") String deviceId){
+        return producer.createWithProperty("get", deviceId, deviceProperty);
+    }
 }
