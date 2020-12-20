@@ -24,4 +24,5 @@ public interface DeviceRepository extends JpaRepository<Device, Integer>{
     @Query("Select t from Device t where t.smarthome.id=:id")
     Optional<Device> findDevicesBySmartHomeId(@Param("id") int id);
 
+    List<Device> findAll();
 }

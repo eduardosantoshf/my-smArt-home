@@ -131,6 +131,9 @@ public class UserController {
         if (userRepository.findUserByUsername(username).isPresent()) {
             return "{\"status\":false,\"reason\":\"User already exists\"}";
         }
+        if (userRepository.findUserByEmail(email).isPresent()) {
+            return "{\"status\":false,\"reason\":\"User already exists\"}";
+        }
         if (pwd.equals(confirmPwd)) {
             User user = new User(email, username, pwd, phone_number);
             user.setAdmin(admin);
