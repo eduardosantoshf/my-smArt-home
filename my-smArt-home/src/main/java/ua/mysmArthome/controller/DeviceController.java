@@ -33,7 +33,6 @@ public class DeviceController {
     public ResponseEntity<Device> getDevicebyId(@PathVariable(value="id") int id) throws ResourceNotFoundException {
         Device device = deviceRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Device "+id+" not found"));
-        System.out.println(device.getSmarthome().getAdmin().getUsername());
         return ResponseEntity.ok().body(device);
     }
     @RequestMapping(value="/name/{name}",method= RequestMethod.GET)

@@ -6,9 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 
@@ -16,7 +14,6 @@ import javax.persistence.Table;
 @Table(name = "SmartHome")
 public class SmartHome {
     private int id;
-    private Admin admin;
     private List<Device> list_devices;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,15 +27,6 @@ public class SmartHome {
 
     public SmartHome() {
     }
-    @OneToOne
-    @JoinColumn(name = "admin_id")
-    public Admin getAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(Admin admin) {
-        this.admin = admin;
-    }
 
     @OneToMany(mappedBy = "smarthome")
     @JsonIgnore
@@ -48,11 +36,6 @@ public class SmartHome {
 
     public void setList_devices(List<Device> list_devices) {
         this.list_devices = list_devices;
-    }
-
-    @Override
-    public String toString() {
-        return "SmartHome{" + "id=" + id + ", admin=" + admin + ", list_devices=" + list_devices + '}';
     }
     
     

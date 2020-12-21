@@ -23,8 +23,6 @@ public class User {
     private String phone;
     private String token;
 
-    private Admin admin = new Admin();
-
     public User() {
     }
 
@@ -90,17 +88,6 @@ public class User {
 
     public void setToken(String token) {
         this.token = token;
-    }
-
-    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "admin_id", nullable = false)
-    @JsonIgnore
-    public Admin getAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(Admin admin) {
-        this.admin = admin;
     }
 
 }

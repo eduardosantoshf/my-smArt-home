@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ua.mysmArthome.exception.ResourceNotFoundException;
 import ua.mysmArthome.model.SmartHome;
-import ua.mysmArthome.repository.AdminRepository;
 import ua.mysmArthome.repository.SmartHomeRepository;
 
 @RestController
@@ -29,37 +28,26 @@ public class SmartHomeController {
     @Autowired
     private SmartHomeRepository smartHomeRepository;
 
-    @Autowired
-    private AdminRepository adminRepository;
-    
-    
     @GetMapping("/all")
     public List<SmartHome> getAllSmartHomes() {
         return smartHomeRepository.findAll();
     }
-    @RequestMapping(value="/admin/{id}",method= RequestMethod.GET)
-    public ResponseEntity<SmartHome> getSmartHomebyAdmin(@PathVariable int id) throws ResourceNotFoundException {
-        SmartHome smartHome = smartHomeRepository.findSmartHomebyAdmin(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Admin "+id+" not found in SmartHome"));
-        return ResponseEntity.ok().body(smartHome);
-    }
-    
-    @RequestMapping(value="/{id}",method= RequestMethod.GET)
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<SmartHome> getSmartHomebyId(@PathVariable int id) throws ResourceNotFoundException {
         SmartHome smartHome = smartHomeRepository.findHomeById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("SmartHome "+id+" not found in SmartHome"));
+                .orElseThrow(() -> new ResourceNotFoundException("SmartHome " + id + " not found in SmartHome"));
         return ResponseEntity.ok().body(smartHome);
     }
-    @PostMapping("/post/{id_admin}")
-    public SmartHome createSmartHome(@PathVariable int id_admin,@Valid @RequestBody SmartHome smartHome) throws ResourceNotFoundException{
-        return adminRepository.findById(id_admin).map(admin->{
-            smartHome.setAdmin(admin);
-            return smartHomeRepository.save(smartHome);
-        }).orElseThrow(()-> new ResourceNotFoundException("Error"));
+
+    @PostMapping("/post/{id_user}")
+    public SmartHome createSmartHome(@Valid @RequestBody SmartHome smartHome) throws ResourceNotFoundException {
+        return smartHomeRepository.save(smartHome);
     }
+
     @DeleteMapping("/delete")
-    public void deleteAll(){
+    public void deleteAll() {
         smartHomeRepository.deleteAll();
     }
-    
+
 }
