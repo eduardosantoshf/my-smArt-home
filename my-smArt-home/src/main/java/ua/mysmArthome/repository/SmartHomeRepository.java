@@ -14,6 +14,6 @@ public interface SmartHomeRepository  extends JpaRepository<SmartHome, Integer>{
     
     @Query("Select t from SmartHome t where t.id=:id")
     Optional<SmartHome> findHomeById(@Param("id") int id);
-    @Query("Select t from SmartHome t where t.admin_id=:id")
+    @Query("Select t from SmartHome t where t.admin.id=:id")
     Optional<SmartHome> findSmartHomebyAdmin(@Param("id") int id);
 }

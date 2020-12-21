@@ -9,7 +9,7 @@ function login(){
         return true;
     }
 
-    const url=EndSer + 'login'; // EndSer é uma variavel que vem do ficheiro basic.js      como basic.js é chamado antes de login.js (no ficheiro Login.html, então, as variaveis e funções de basic.js passam para login.js)
+    const url=EndSer + 'user/login'; // EndSer é uma variavel que vem do ficheiro basic.js      como basic.js é chamado antes de login.js (no ficheiro Login.html, então, as variaveis e funções de basic.js passam para login.js)
     if(username!=null){
         $.ajax(url,{
             type:'POST',
