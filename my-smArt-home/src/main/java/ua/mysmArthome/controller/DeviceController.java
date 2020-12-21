@@ -60,7 +60,7 @@ public class DeviceController {
     @PutMapping("/{id}")
     public ResponseEntity<Device> updateDevice(@PathVariable(value="id") int deviceId,@Valid @RequestBody Device deviceDetails)
         throws ResourceNotFoundException{
-        Device device = deviceRepository.findDeviceById(deviceId)
+        Device device = deviceRepository.findById(deviceId)
                 .orElseThrow(()->new ResourceNotFoundException("Device "+deviceId+" not found"));
         device.setName(deviceDetails.getName());
         /*device.setStatus(deviceDetails.getStatus());

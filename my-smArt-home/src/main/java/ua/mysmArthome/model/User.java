@@ -1,15 +1,13 @@
 package ua.mysmArthome.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import javax.persistence.CascadeType;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -22,8 +20,9 @@ public class User {
     private String password; //String or hash (depending on implementation might be better to use hash
     private String phone;
     private String token;
-
+    private List<Integer> homes_id;
     public User() {
+        this.homes_id = new ArrayList<>();
     }
 
     public User(String email, String username, String password, String phone_number) {
@@ -31,6 +30,7 @@ public class User {
         this.username = username;
         this.password = password;
         this.phone = phone_number;
+        this.homes_id = new ArrayList<>();
     }
     
     
@@ -89,5 +89,16 @@ public class User {
     public void setToken(String token) {
         this.token = token;
     }
+
+    @ElementCollection
+
+    public List<Integer> getHomes_id() {
+        return homes_id;
+    }
+
+    public void setHomes_id(List<Integer> homes_id) {
+        this.homes_id = homes_id;
+    }
+    
 
 }

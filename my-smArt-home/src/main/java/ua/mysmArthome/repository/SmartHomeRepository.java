@@ -5,13 +5,8 @@ import org.springframework.stereotype.Repository;
 
 import ua.mysmArthome.model.SmartHome;
 
-import java.util.Optional;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 @Repository
 public interface SmartHomeRepository  extends JpaRepository<SmartHome, Integer>{
-    
-    @Query("Select t from SmartHome t where t.id=:id")
-    Optional<SmartHome> findHomeById(@Param("id") int id);
+
 }

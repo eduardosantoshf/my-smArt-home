@@ -14,9 +14,6 @@ import org.springframework.data.repository.query.Param;
 public interface DeviceRepository extends JpaRepository<Device, Integer>{
     
     //List<Device> findById(int id);
-    
-    @Query("Select t from Device t where t.id=:id")
-    Optional<Device> findDeviceById(@Param("id") int id);
 
     @Query("Select t from Device t where t.name=:name")
     Optional<Device> findDeviceByName(@Param("name") String name);
