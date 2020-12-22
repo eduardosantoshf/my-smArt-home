@@ -109,7 +109,7 @@ public class RpcProducer implements AutoCloseable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(" [.] Got '" + response + "'");
+        //System.out.println(" [.] Got '" + response + "'");
         
         return result;
     }

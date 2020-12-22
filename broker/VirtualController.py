@@ -20,7 +20,7 @@ class VirtualController():
             r=random.random()
             if r>0.99:
                 device_ip=ip_parts[0]+"."+ip_parts[1]+"."+ip_parts[2]+"."+str(x)
-                device_id=random.random()*9999999999999999
+                device_id=round(random.random()*9999999)
                 random.shuffle(tipos)
                 self.devices[str(device_id)]={"status":"turned-Off", "ip_":device_ip, "id_":device_id, "type_":tipos[0]}
 
@@ -93,6 +93,11 @@ class VirtualController():
             device_brightness=random.random()*100
             return device_brightness
         return None
+
+    def tipo(self, id):
+        if id not in self.devices:
+            return None
+        return self.devices[id]["type_"]
         
 # tests
 #

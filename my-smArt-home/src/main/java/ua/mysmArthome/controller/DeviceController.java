@@ -29,10 +29,19 @@ public class DeviceController {
     private RpcProducer producer = new RpcProducer();
     
     @GetMapping("/{id}")
-    public ResponseEntity<Device> getDevicebyId(@PathVariable(value="id") int id) throws ResourceNotFoundException {
+    public String getDevicebyId(@PathVariable(value="id") int id) throws ResourceNotFoundException {
         Device device = deviceRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Device "+id+" not found"));
-        return ResponseEntity.ok().body(device);
+
+        int borker_id = device.getInBroker_id();
+        String retorno = "{\"device\":[";
+        String idd="{\"id\":\""+borker_id+"\"}";
+        String status = producer.createWithProperty("get", String.valueOf(borker_id), "status");
+        String type = producer.createWithProperty("get", String.valueOf(borker_id), "type");
+
+        retorno+=idd + "," + status + "," + type + "]}";
+        System.out.println(retorno);
+        return retorno;
     }
     @RequestMapping(value="/name/{name}",method= RequestMethod.GET)
     public ResponseEntity<Device> getDevicebyName(@PathVariable String name) throws ResourceNotFoundException {
@@ -48,12 +57,20 @@ public class DeviceController {
         return ResponseEntity.ok().body(device);
     }
     
-    @PostMapping("/post/{id_home}")
-    public Device createDevice(@PathVariable int id_home,@Valid @RequestBody Device device) throws ResourceNotFoundException{
-        return smartHomeRepository.findById(id_home).map(home->{
-            device.setSmarthome(home);
-            return deviceRepository.save(device);
-        }).orElseThrow(()-> new ResourceNotFoundException("Error"));
+    @PostMapping("/post")
+    public Device createDevice(Integer id_home, String device_id) throws ResourceNotFoundException{
+        SmartHome sm = smartHomeRepository.findById(id_home).orElseThrow(()-> new ResourceNotFoundException("Error"));
+        Device d = new Device();
+        Integer id=Integer.parseInt(device_id);
+        d.setInBroker_id(id);
+        d.setName("");
+        d.setSmarthome(sm);
+        deviceRepository.save(d);
+        List<Device> home_devices = sm.getList_devices();
+        home_devices.add(d);
+        sm.setList_devices(home_devices);
+        smartHomeRepository.save(sm);
+        return d;
     }
     
     @PutMapping("/{id}")
@@ -149,7 +166,6 @@ public class DeviceController {
     @GetMapping("/hardcheck/{username}")
     public String hardcheck(@PathVariable(value = "username") String username){
         String retorno = producer.createMessage("hardcheck", "");
-        System.out.println(retorno);
-        return "ola";
+        return retorno;
     }
 }

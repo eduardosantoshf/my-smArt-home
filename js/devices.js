@@ -24,31 +24,75 @@ function getDevices(){
                     }
                 });
             }
+            var user_devices=[]
             // if there is any SmartHome
             $.ajax(EndSer+"device/alldevices/"+username,{
                 type:'GET',
                 success: function(data2, status, xhr){
-                    var obj=JSON.parse(data2);
-                    if(obj.devices.length == 0){
+                    var obj2=JSON.parse(data2);
+                    user_devices=obj2.devices;
+                    if(obj2.devices.length == 0){
                         $.ajax(EndSer+"device/hardcheck/"+username,{
                             type:'GET',
                             success: function(data3, status, xhr){
-                                console.log(data3)
+                                var obj3=JSON.parse(data3);
+                                user_devices=obj3.devices;
+                                fullFill(user_devices);
+
+                                user_devices.forEach(device => {
+                                    $.ajax(EndSer+"device/post",{
+                                        type:'POST',
+                                        data:{id_home:user_home[0], device_id: parseInt(device.id_)},
+                                        success: function(data4, status, xhr){
+                                            
+                                        }
+                                    });
+                                });
+                                
                             }
                         });
+                    }else{
+                        user_devices.forEach(device => {
+                            $.ajax(EndSer+"device/"+device.id,{
+                                type:'GET',
+                                success: function(data4, status, xhr){
+                                    var obj = JSON.parse(data4);
+                                    var device = obj.device;
+                                    var id=device[0].id;
+                                    var status="";
+                                    if(device[1].status!=undefined && device[1].status!="None"){
+                                        status=device[1].status
+                                    }
+                                    var type="";
+                                    if(device[2].type!=undefined && device[1].type!="None"){
+                                        type=device[2].type
+                                    }
+
+                                    if(device[1].status!=undefined && device[1].status!="None" && device[2].type!=undefined && device[1].type!="None")
+                                        addDevice(id, status, type)
+                                    
+                                }
+                            });
+                        });
+                        
                     }
                 }
             });
-
-            /*if(obj.status==true){ // se já estiver autenticado
-                var ihtml = '';
-                obj.devices.forEach(device => {
-                    ihtml+='<tr> <td>'+device.id+'</td> <td>'+device.name+'</td> <td>tipo</td> <td>estado (online/offline)</td> <td>-</td> </tr>';
-                });
-                document.getElementById("listDevices").innerHTML=ihtml;
-            }else{
-                alert(obj.reason)
-            }*/
         }
     });
+}
+
+function fullFill(user_devices){
+    if(user_devices.length>0){
+        var ihtml='';
+        user_devices.forEach(device => {
+            ihtml+='<tr> <td>'+parseInt(device.id_)+'</td> <td>-</td> <td>'+device.type_+'</td> <td>'+device.status+'</td> <td>-</td> </tr>';
+            document.getElementById("listDevices").innerHTML=ihtml;
+        });
+    }
+}
+
+function addDevice(id, status, type){
+    var ihtml='<tr> <td>'+id+'</td> <td>-</td> <td>'+type+'</td> <td>'+status+'</td> <td>-</td> </tr>';
+    document.getElementById("listDevices").innerHTML=document.getElementById("listDevices").innerHTML + ihtml;
 }

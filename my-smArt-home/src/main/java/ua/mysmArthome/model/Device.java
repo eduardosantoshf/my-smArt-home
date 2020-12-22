@@ -16,6 +16,8 @@ public class Device {
     private int id;
     private String name; //name of the device
     private SmartHome smarthome;
+    private int inBroker_id;
+
     public Device() {
     }
 
@@ -41,6 +43,16 @@ public class Device {
     public void setName(String name) {
         //change the name of the device
         this.name = name;
+    }
+
+    @Column(name = "inBroker_id", nullable = false)
+    public int getInBroker_id() {
+        return inBroker_id;
+    }
+
+    public void setInBroker_id(Integer id) {
+        //change the name of the device
+        this.inBroker_id=id;
     }
 
     @ManyToOne
