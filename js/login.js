@@ -12,11 +12,12 @@ function login(){
     const url=EndSer + 'user/login'; // EndSer é uma variavel que vem do ficheiro basic.js      como basic.js é chamado antes de login.js (no ficheiro Login.html, então, as variaveis e funções de basic.js passam para login.js)
     if(username!=null){
         $.ajax(url,{
-            type:'POST',
+            type:'GET',
             data:{username:username, pwd:password},
             success: function(data, status, xhr){
                 var obj=JSON.parse(data);
                 if(obj.status==true){ // se já estiver autenticado
+                    localStorage.setItem("username", username)
                     window.location.href="Profile.html";
                     return true;
                 }else{
