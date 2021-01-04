@@ -28,6 +28,7 @@ import ua.mysmArthome.model.Admin;
 import ua.mysmArthome.repository.AdminRepository;
 import ua.mysmArthome.repository.UserRepository;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -68,8 +69,7 @@ public class UserController {
 
     @PostMapping("/post/{id_admin}/user")
     public void createUser(@PathVariable int id_admin, @Valid @RequestBody User user) throws ResourceNotFoundException {
-        System.out.println(this.getRegister(user.getEmail(), user.getUsername(), user.getPassword(), "password", user.getPhone(),
-                adminRepostiory.findById(id_admin).get()));
+        System.out.println(this.getRegister(user.getEmail(), user.getUsername(), user.getPassword(), "password", user.getPhone()));
     }
 
     @PutMapping("/{username}")
@@ -125,15 +125,17 @@ public class UserController {
         return "{\"status\":false,\"reason\":\"User and password incorrect\"}";
     }
 
-    @CrossOrigin
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/register")
-    public String getRegister(String email, String username, String pwd, String confirmPwd, String phone_number, Admin admin) throws ResourceNotFoundException {
+    public String getRegister(String email, String username, String pwd, String confirmPwd, String phone_number) throws ResourceNotFoundException {
+
         if (userRepository.findUserByUsername(username).isPresent()) {
             return "{\"status\":false,\"reason\":\"User already exists\"}";
         }
         if (userRepository.findUserByEmail(email).isPresent()) {
             return "{\"status\":false,\"reason\":\"User already exists\"}";
         }
+        Admin admin =  new Admin(0, "admin", "admin@ies.com", "password", "123456789");
         if (pwd.equals(confirmPwd)) {
             User user = new User(email, username, pwd, phone_number);
             user.setAdmin(admin);
@@ -142,7 +144,7 @@ public class UserController {
             //
             user.setToken(generatedString);
             userRepository.save(user);
-            return "{\"status\":true, \"token\":" + generatedString + "}";
+            return "{\"status\":true, \"token\":\"" + generatedString + "\"}";
         }
         return "{\"status\":false,\"reason\":\"Register not successfull\"}";
     }

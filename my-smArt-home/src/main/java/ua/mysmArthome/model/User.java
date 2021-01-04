@@ -18,7 +18,7 @@ public class User {
 
     private int id;
     private String email;
-    private String username;
+    private String username = "";
     private String password; //String or hash (depending on implementation might be better to use hash
     private String phone;
     private String token;

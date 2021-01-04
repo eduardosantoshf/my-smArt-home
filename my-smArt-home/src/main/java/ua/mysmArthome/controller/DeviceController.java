@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ua.mysmArthome.exception.ResourceNotFoundException;
 import ua.mysmArthome.model.Device;
@@ -87,7 +86,7 @@ public class DeviceController{
         return response;
     }
     
-    @DeleteMapping("/deleteAll")
+    @DeleteMapping("/delete")
     public void deleteAll(){
         deviceRepository.deleteAll();
     }
@@ -112,26 +111,26 @@ public class DeviceController{
     }
     
     @CrossOrigin
-    @PostMapping("/turnOn")
-    public String turnOnDevice(@RequestParam(value = "id",required = true) String deviceId){
+    @PostMapping("/turnOn/{id}")
+    public String turnOnDevice(@PathVariable(value = "id") String deviceId){
         return producer.createMessage("turnOn",deviceId);
     }
 
     @CrossOrigin
-    @PostMapping("/turnOff")
-    public String turnOffDevice(@RequestParam(value = "id",required = true) String deviceId){
+    @PostMapping("/turnOff/{id}")
+    public String turnOffDevice(@PathVariable(value = "id") String deviceId){
         return producer.createMessage("turnOff",deviceId);
     }
 
     @CrossOrigin
-    @GetMapping("/brightness")
-    public String BrightnessOfDevice(@RequestParam(value = "id",required = true)  String deviceId){
-        return producer.createMessage("brightness",deviceId); //right now brightness is random
-    }
+    @GetMapping("/brightness/{id}")
 
     @CrossOrigin
     @GetMapping("/deviceProperty")
     public String DeviceProperty(@RequestParam(value = "property",required = true) String deviceProperty,@RequestParam(value = "id",required = true)  String deviceId){
+=======
+    @GetMapping("/{property}/{id}")
+    public String DeviceProperty(@PathVariable(value = "property") String deviceProperty,@PathVariable(value = "id") String deviceId){
         return producer.createWithProperty("get", deviceId, deviceProperty);
     }
 }
