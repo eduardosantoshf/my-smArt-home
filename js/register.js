@@ -21,6 +21,7 @@ function register(){
                 var obj=JSON.parse(data);
                 if(obj.status==true){ // se já estiver autenticado
                     localStorage.setItem("token", obj["token"])
+                    localStorage.setItem("username", username)
                     window.location.href="Profile.html";
                     return true;
                 }else{

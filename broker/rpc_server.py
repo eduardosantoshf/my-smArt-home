@@ -37,10 +37,12 @@ class Generator:
                 value=self.VirtualDevices.ringing(device)
             elif property=="brightness":
                 value=self.VirtualDevices.brightness(device)
+            elif property=="type":
+                value=self.VirtualDevices.tipo(device)
             
             if value==None:
                 response='{"result":False, "reason":"Device not found"}'
-            response='{"result":True, "'+property+'":"'+str(value)+'"}'
+            response='{"result":true, "'+property+'":"'+str(value)+'"}'
         elif command["op"]=="hardcheck": # hardcheck operation means you want to know all devices connected to your network, no extra information is required to be sent
             devices=self.VirtualDevices.hardCheck()
             response='{"devices":['
@@ -56,15 +58,15 @@ class Generator:
         elif command["op"]=="turnOn": # turn on an especific device, so it need to specify the id
             ip=command["id"]
             retorno=self.VirtualDevices.turnOn(ip)
-            response='{"result":True, "status":"turned-on"}'
+            response='{"result":true, "status":"turned-on"}'
         elif command["op"]=="turnOff": # turn off an especific device, so it need to specify the id
             ip=command["id"]
             retorno=self.VirtualDevices.turnOff(ip)
-            response='{"result":True, "status":"turned-off"}'
+            response='{"result":true, "status":"turned-off"}'
         elif command["op"]=="brightness": # set (different) brightness to lights. only works on lighs and requires "id" and "brightness"
             ip=command["id"]
             brightness=command["brightness"]
-            response='{"result":True, "brightness":"'+brightness+'"}'
+            response='{"result":true, "brightness":"'+brightness+'"}'
         
         ch.basic_publish(exchange='',
                          routing_key=props.reply_to,
