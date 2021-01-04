@@ -23,10 +23,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ua.mysmArthome.exception.ResourceNotFoundException;
+import ua.mysmArthome.model.SmartHome;
 import ua.mysmArthome.model.User;
+import ua.mysmArthome.repository.SmartHomeRepository;
 import ua.mysmArthome.repository.UserRepository;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -35,7 +36,6 @@ public class UserController {
     private UserRepository userRepository;
     //i think the best way to find the users are username
 
-    @GetMapping("/all")
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
@@ -105,23 +105,19 @@ public class UserController {
                 //
                 user.setToken(generatedString);
                 userRepository.save(user);
-                return "{\"status\": true, \"token\":" + generatedString + "}"; //send token for login
+                return "{\"status\": true, \"token\": \"" + generatedString + "\"}"; //send token for login
             }
 
         }
         return "{\"status\":false,\"reason\":\"User and password incorrect\"}";
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @CrossOrigin
     @PostMapping("/register")
     public String getRegister(String email, String username, String pwd, String confirmPwd, String phone_number) throws ResourceNotFoundException {
         if (userRepository.findUserByUsername(username).isPresent()) {
             return "{\"status\":false,\"reason\":\"User already exists\"}";
         }
-        if (userRepository.findUserByEmail(email).isPresent()) {
-            return "{\"status\":false,\"reason\":\"User already exists\"}";
-        }
-        Admin admin =  new Admin(0, "admin", "admin@ies.com", "password", "123456789");
         if (pwd.equals(confirmPwd)) {
             User user = new User(email, username, pwd, phone_number);
             //need to generate a token
@@ -148,6 +144,19 @@ public class UserController {
                 .toString();
         return generatedString;
         //
+    }
+
+    @CrossOrigin
+    @PostMapping("/smarthome")
+    public void createSmarthomeUser(String username) throws ResourceNotFoundException {
+        User activeUser = userRepository.findUserByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User " + username + " not found"));
+        List<Integer> user_sm = activeUser.getHomes_id();
+        SmartHome sm = new SmartHome("casa");
+        smarthomeRepository.save(sm);
+        user_sm.add(sm.getId());
+        activeUser.setHomes_id(user_sm);
+        userRepository.save(activeUser);
     }
 
 }

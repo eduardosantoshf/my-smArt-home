@@ -1,5 +1,6 @@
 package ua.mysmArthome.model;
 
+<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
@@ -9,6 +10,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+=======
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+>>>>>>> feature-broker
 
 @Entity
 @Table(name = "User")
@@ -16,11 +24,15 @@ public class User {
 
     private int id;
     private String email;
-    private String username = "";
+    private String username;
     private String password; //String or hash (depending on implementation might be better to use hash
     private String phone;
     private String token;
     private List<Integer> homes_id;
+<<<<<<< HEAD
+=======
+
+>>>>>>> feature-broker
     public User() {
         this.homes_id = new ArrayList<>();
     }
@@ -32,8 +44,6 @@ public class User {
         this.phone = phone_number;
         this.homes_id = new ArrayList<>();
     }
-    
-    
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
