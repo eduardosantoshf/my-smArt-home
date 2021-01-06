@@ -38,8 +38,9 @@ public class DeviceController {
         String idd="{\"id\":\""+borker_id+"\"}";
         String status = producer.createWithProperty("get", String.valueOf(borker_id), "status");
         String type = producer.createWithProperty("get", String.valueOf(borker_id), "type");
+        String active = producer.createWithProperty("get", String.valueOf(borker_id), "active_since");
 
-        retorno+=idd + "," + status + "," + type + "]}";
+        retorno+=idd + "," + status + "," + type + "," + active + "]}";
         System.out.println(retorno);
         return retorno;
     }
@@ -164,8 +165,18 @@ public class DeviceController {
 
     @CrossOrigin
     @GetMapping("/hardcheck/{username}")
-    public String hardcheck(@PathVariable(value = "username") String username){
-        String retorno = producer.createMessage("hardcheck", "");
+    public String hardcheck(@PathVariable(value = "username") String username) throws ResourceNotFoundException {
+        String id="";
+        Integer home_id = userRepository.findHomesByUsername(username).getHomes_id().get(0);
+        id=String.valueOf(home_id);
+
+        // clean previous devices
+        SmartHome sm = smartHomeRepository.findHomeById(home_id).orElseThrow(() -> new ResourceNotFoundException("Home " + home_id + " not found"));
+        for(Device d : sm.getList_devices()){
+            deviceRepository.delete(d);
+        }
+
+        String retorno = producer.createMessage("hardcheck", id);
         return retorno;
     }
 }

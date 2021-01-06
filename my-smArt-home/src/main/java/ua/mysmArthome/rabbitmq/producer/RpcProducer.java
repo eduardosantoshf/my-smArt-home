@@ -55,6 +55,7 @@ public class RpcProducer implements AutoCloseable {
 
         switch (option) {
             case "hardcheck": // used to get all available devices from the server
+                jo.put("home_id", id); // in this case "id" must be the home's id
                 break;
             case "get":
                 jo.put("property", this.property);
@@ -101,6 +102,7 @@ public class RpcProducer implements AutoCloseable {
         String result="";
         try {
             result = response.take();
+            System.out.println(result);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -114,7 +116,7 @@ public class RpcProducer implements AutoCloseable {
         return result;
     }
     
-    public String createWithProperty(String option,String id,String property){
+    public String createWithProperty(String option,String id,String property){ // for hardcheck, id should be home's id
         this.property=property;
         return createMessage(option,id);
     }

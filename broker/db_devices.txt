@@ -1,0 +1,1 @@
+{"devices":[{"id":"1899591", "type":"humidity", "active":"2021-01-06"},{"id":"1513238", "type":"light", "active":"2021-01-06"}]}

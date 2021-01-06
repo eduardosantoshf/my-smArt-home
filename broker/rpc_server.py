@@ -39,17 +39,19 @@ class Generator:
                 value=self.VirtualDevices.brightness(device)
             elif property=="type":
                 value=self.VirtualDevices.tipo(device)
+            elif property=="active_since":
+                value=self.VirtualDevices.active(device)
             
             if value==None:
                 response='{"result":False, "reason":"Device not found"}'
             response='{"result":true, "'+property+'":"'+str(value)+'"}'
         elif command["op"]=="hardcheck": # hardcheck operation means you want to know all devices connected to your network, no extra information is required to be sent
+            home_id = command["home_id"]
             devices=self.VirtualDevices.hardCheck()
             response='{"devices":['
             counter=0
             for d in devices:
                 x=devices[d]
-                print(x)
                 counter+=1
                 response+='{"status":"'+x["status"]+'", "ip_":"'+x["ip_"]+'", "id_":"'+str(x["id_"])+'", "type_":"'+x["type_"]+'"}'
                 if counter<len(devices):
