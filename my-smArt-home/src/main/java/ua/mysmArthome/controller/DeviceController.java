@@ -6,13 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.mysmArthome.exception.ResourceNotFoundException;
-import ua.mysmArthome.model.Device;
-import ua.mysmArthome.model.SmartHome;
-import ua.mysmArthome.model.User;
+import ua.mysmArthome.model.*;
 import ua.mysmArthome.rabbitmq.producer.RpcProducer;
 import ua.mysmArthome.repository.DeviceRepository;
+import ua.mysmArthome.repository.LogDeviceRepository;
 import ua.mysmArthome.repository.SmartHomeRepository;
 import ua.mysmArthome.repository.UserRepository;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/device")
@@ -26,8 +27,24 @@ public class DeviceController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private LogDeviceRepository logDeviceRepository;
+
     private RpcProducer producer = new RpcProducer();
-    
+
+    @GetMapping("/logs/{id}")
+    public String getLogsbyId(@PathVariable(value="id") int id) throws ResourceNotFoundException {
+        Device device = deviceRepository.findDeviceByInBrokerId(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Device "+id+" not found"));
+        /*List<LogDevice> logs = device.getLogs();
+
+        for(LogDevice ld : logs){
+            System.out.println(ld.getText());
+        }*/
+        String retorno = "{\"logs\":\"\"}";
+        return retorno;
+    }
+
     @GetMapping("/{id}")
     public String getDevicebyId(@PathVariable(value="id") int id) throws ResourceNotFoundException {
         Device device = deviceRepository.findById(id)
@@ -66,6 +83,14 @@ public class DeviceController {
         d.setInBroker_id(id);
         d.setName("");
         d.setSmarthome(sm);
+
+        LogDevice log = new LogDevice();
+        log.setDevice(d);
+        log.setText("Device found!");
+        log.setTimedate(getCurrentTime());
+
+        d.addLog(log);
+        logDeviceRepository.save(log);
         deviceRepository.save(d);
         List<Device> home_devices = sm.getList_devices();
         home_devices.add(d);
@@ -172,11 +197,22 @@ public class DeviceController {
 
         // clean previous devices
         SmartHome sm = smartHomeRepository.findHomeById(home_id).orElseThrow(() -> new ResourceNotFoundException("Home " + home_id + " not found"));
+        Logs log = new Logs();
+        log.setTimedate(getCurrentTime());
+        log.setText("All older devices ware removed!");
+        sm.addLog(log);
+
         for(Device d : sm.getList_devices()){
             deviceRepository.delete(d);
         }
 
         String retorno = producer.createMessage("hardcheck", id);
         return retorno;
+    }
+
+    public String getCurrentTime(){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        return dtf.format(now);
     }
 }

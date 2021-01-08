@@ -34,25 +34,7 @@ function getDevices(){
                     user_devices=obj2.devices;
                     console.log(obj2)
                     if(obj2.devices.length == 0){
-                        $.ajax(EndSer+"device/hardcheck/"+username,{
-                            type:'GET',
-                            success: function(data3, status, xhr){
-                                var obj3=JSON.parse(data3);
-                                user_devices=obj3.devices;
-                                fullFill(user_devices);
-
-                                user_devices.forEach(device => {
-                                    $.ajax(EndSer+"device/post",{
-                                        type:'POST',
-                                        data:{id_home:user_home[0], device_id: parseInt(device.id_)},
-                                        success: function(data4, status, xhr){
-                                            
-                                        }
-                                    });
-                                });
-                                
-                            }
-                        });
+                        hardcheck();
                     }else{
                         user_devices.forEach(device => {
                             $.ajax(EndSer+"device/"+device.id,{
@@ -66,6 +48,7 @@ function getDevices(){
                                     if(device[1].status!=undefined && device[1].status!="None"){
                                         status=device[1].status
                                     }
+                                    
                                     var type="";
                                     if(device[2].type!=undefined && device[2].type!="None"){
                                         type=device[2].type
@@ -138,10 +121,13 @@ function openLogs(device_id){
         $("#logBtn_"+device_id).get(0).src='images/up_arrow.png';
 
         // TODO: REQUEST LOGS
-
-
-
-
+        $.ajax(EndSer+"device/logs/"+device_id,{
+            type:'GET',
+            data:{username:username},
+            success: function(data, status, xhr){
+                $("#logs_"+device_id).html(data);
+            }
+        });
 
     }
     

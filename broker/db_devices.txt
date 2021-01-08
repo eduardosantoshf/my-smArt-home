@@ -1,1 +1,1 @@
-{"devices":[{"id":"1899591", "type":"humidity", "active":"2021-01-06"},{"id":"1513238", "type":"light", "active":"2021-01-06"}]}
+{"devices":[{"id":"9509397", "type":"door", "active":"2021-01-08"},{"id":"9836811", "type":"proximity", "active":"2021-01-08"},{"id":"9890365", "type":"plug", "active":"2021-01-08"}]}

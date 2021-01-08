@@ -1,13 +1,10 @@
 package ua.mysmArthome.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Device")
@@ -17,6 +14,7 @@ public class Device {
     private String name; //name of the device
     private SmartHome smarthome;
     private int inBroker_id;
+    private List<LogDevice> logs=new ArrayList<>();
 
     public Device() {
     }
@@ -70,5 +68,19 @@ public class Device {
     public String toString() {
         return "Device{" + "id=" + id + ", name=" + name + ", smarthome=" + smarthome + '}';
     }
-    
+
+    @OneToMany(mappedBy = "device")
+    @JsonIgnore
+    public List<LogDevice> getLogs(){
+        return this.logs;
+    }
+
+    public void setLogs(List<LogDevice> logs){
+        this.logs=logs;
+    }
+
+    public void addLog(LogDevice log){
+        this.logs.add(log);
+    }
+
 }

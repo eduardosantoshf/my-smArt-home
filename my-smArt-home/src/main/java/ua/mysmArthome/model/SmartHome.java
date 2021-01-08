@@ -1,14 +1,10 @@
 package ua.mysmArthome.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 
 @Entity
@@ -17,6 +13,8 @@ public class SmartHome {
     private int id;
     private String name;
     private List<Device> list_devices;
+    private List<Logs> logs=new ArrayList<>();
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public int getId() {
@@ -33,7 +31,20 @@ public class SmartHome {
     public SmartHome(String name) {
         this.name = name;
     }
-    
+
+    @OneToMany(mappedBy = "smarthome")
+    @JsonIgnore
+    public List<Logs> getLogs(){
+        return this.logs;
+    }
+
+    public void setLogs(List<Logs> logs){
+        this.logs=logs;
+    }
+
+    public void addLog(Logs log){
+        this.logs.add(log);
+    }
 
     @Column(name = "name", nullable = false)
     public String getName() {
@@ -53,8 +64,5 @@ public class SmartHome {
     public void setList_devices(List<Device> list_devices) {
         this.list_devices = list_devices;
     }
-    
-    
-    
-    
+
 }
