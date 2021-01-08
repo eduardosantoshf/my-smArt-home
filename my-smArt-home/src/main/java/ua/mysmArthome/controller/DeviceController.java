@@ -32,9 +32,6 @@ public class DeviceController {
     public String getDevicebyId(@PathVariable(value="id") int id) throws ResourceNotFoundException {
         Device device = deviceRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Device "+id+" not found"));
-<<<<<<< HEAD
-        return ResponseEntity.ok().body(device);
-=======
 
         int borker_id = device.getInBroker_id();
         String retorno = "{\"device\":[";
@@ -45,7 +42,6 @@ public class DeviceController {
         retorno+=idd + "," + status + "," + type + "]}";
         System.out.println(retorno);
         return retorno;
->>>>>>> feature-broker
     }
     @RequestMapping(value="/name/{name}",method= RequestMethod.GET)
     public ResponseEntity<Device> getDevicebyName(@PathVariable String name) throws ResourceNotFoundException {
@@ -155,24 +151,17 @@ public class DeviceController {
     }
 
     @CrossOrigin
-<<<<<<< HEAD
-    @GetMapping("/brightness/{id}")
-=======
     @GetMapping("/brightness")
     public String BrightnessOfDevice(@RequestParam(value = "id",required = true)  String deviceId){
         return producer.createMessage("brightness",deviceId); //right now brightness is random
     }
->>>>>>> feature-broker
 
     @CrossOrigin
     @GetMapping("/deviceProperty")
     public String DeviceProperty(@RequestParam(value = "property",required = true) String deviceProperty,@RequestParam(value = "id",required = true)  String deviceId){
-<<<<<<< HEAD
-=======
     @GetMapping("/{property}/{id}")
     public String DeviceProperty(@PathVariable(value = "property") String deviceProperty,@PathVariable(value = "id") String deviceId){
 =======
->>>>>>> feature-broker
         return producer.createWithProperty("get", deviceId, deviceProperty);
     }
 

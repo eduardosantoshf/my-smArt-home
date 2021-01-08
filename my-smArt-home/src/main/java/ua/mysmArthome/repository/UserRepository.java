@@ -28,11 +28,8 @@ public interface UserRepository  extends JpaRepository<User, Integer>{
     
     @Query("Select t from User t where t.email=:email")
     Optional<User> findUserByEmail(@Param("email") String email);
-<<<<<<< HEAD
-=======
 
     @Modifying
     @Query("update User u set u.homes_id = ?1 where u.username = ?2")
     void setUserByUsername(List<Integer> homes_id, String username);
->>>>>>> feature-broker
 }
