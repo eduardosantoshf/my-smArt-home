@@ -77,14 +77,32 @@ function fullFill(user_devices){
     if(user_devices.length>0){
         var ihtml='';
         user_devices.forEach(device => {
-            ihtml+='<tr> <td>'+parseInt(device.id_)+'</td> <td>-</td> <td>'+device.type_+'</td> <td>'+device.status+'</td> <td>'+device.active_since+'</td><td style="text-align:center"><img style="width: 16px; height: 16px;" src="images/down_arrow.png" id="logBtn_'+device.id_+'" onclick="openLogs('+device.id_+')"/></td> </tr> <tr><td colspan="6" class="logs" id="logs_'+device.id_+'"> teste </td></tr>';
+            var src="";
+            var operation=""
+            if(device.status=="turned-On"){
+                src="images/power.png"
+                operation="turnOff"
+            }else{
+                src="images/power-2.png"
+                operation="turnOn"
+            }
+            ihtml+='<tr> <td>'+parseInt(device.id_)+'</td> <td>-</td> <td>'+device.type_+'</td> <td>'+device.status+' <img src="'+src+'" onclick="changeState(&quot;'+operation+'&quot;, &quot;'+device.id_+'&quot;)"></td> <td>'+device.active_since+'</td><td style="text-align:center"><img style="width: 16px; height: 16px;" src="images/down_arrow.png" id="logBtn_'+device.id_+'" onclick="openLogs('+device.id_+')"/></td> </tr> <tr><td colspan="6" class="logs" id="logs_'+device.id_+'"> teste </td></tr>';
             document.getElementById("listDevices").innerHTML=ihtml;
         });
     }
 }
 
 function addDevice(id, status, type, active_since){
-    var ihtml='<tr> <td>'+id+'</td> <td>-</td> <td>'+type+'</td> <td>'+status+'</td> <td>'+active_since+'</td><td style="text-align:center"><img style="width: 16px; height: 16px;" src="images/down_arrow.png" id="logBtn_'+id+'" onclick="openLogs('+id+')"/></td></tr><tr><td colspan="6" class="logs" id="logs_'+id+'"> teste </td></tr>';
+    var src=""
+    var operation=""
+    if(status=="turned-On"){
+        src="images/power.png"
+        operation="turnOff"
+    }else{
+        src="images/power-2.png"
+        operation="turnOn"
+    }
+    var ihtml='<tr> <td>'+id+'</td> <td>-</td> <td>'+type+'</td> <td>'+status+' <img src="'+src+'" onclick="changeState(&quot;'+operation+'&quot;, &quot;'+id+'&quot;)"></td> <td>'+active_since+'</td><td style="text-align:center"><img style="width: 16px; height: 16px;" src="images/down_arrow.png" id="logBtn_'+id+'" onclick="openLogs('+id+')"/></td></tr><tr><td colspan="6" class="logs" id="logs_'+id+'"> teste </td></tr>';
     document.getElementById("listDevices").innerHTML=document.getElementById("listDevices").innerHTML + ihtml;
 }
 
@@ -125,10 +143,21 @@ function openLogs(device_id){
             type:'GET',
             data:{username:username},
             success: function(data, status, xhr){
-                $("#logs_"+device_id).html(data);
+                var obj = JSON.parse(data);
+                $("#logs_"+device_id).html(obj.logs);
             }
         });
 
-    }
-    
+    }   
+}
+
+function changeState(operation, device_id){
+    $.ajax(EndSer+"device/"+operation,{
+        type:'POST',
+        data:{id:device_id},
+        success: function(data, status, xhr){
+            document.getElementById("listDevices").innerHTML='';
+            getDevices();
+        }
+    });
 }

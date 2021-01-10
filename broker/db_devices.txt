@@ -1,1 +1,1 @@
-{"devices":[{"id":"9509397", "type":"door", "active":"2021-01-08"},{"id":"9836811", "type":"proximity", "active":"2021-01-08"},{"id":"9890365", "type":"plug", "active":"2021-01-08"}]}
+{"devices":[{"id":"292047", "type":"termal", "active":"2021-01-10"},{"id":"3869724", "type":"door", "active":"2021-01-10"},{"id":"7307081", "type":"termal", "active":"2021-01-10"},{"id":"2193430", "type":"sec_camera", "active":"2021-01-10"}]}

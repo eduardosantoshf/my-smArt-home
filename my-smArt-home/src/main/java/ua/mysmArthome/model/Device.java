@@ -14,7 +14,7 @@ public class Device {
     private String name; //name of the device
     private SmartHome smarthome;
     private int inBroker_id;
-    private List<LogDevice> logs=new ArrayList<>();
+    private String logs="";
 
     public Device() {
     }
@@ -69,18 +69,13 @@ public class Device {
         return "Device{" + "id=" + id + ", name=" + name + ", smarthome=" + smarthome + '}';
     }
 
-    @OneToMany(mappedBy = "device")
-    @JsonIgnore
-    public List<LogDevice> getLogs(){
+    @Column(name = "logs", nullable = false)
+    public String getLogs(){
         return this.logs;
     }
-
-    public void setLogs(List<LogDevice> logs){
+    public void setLogs(String logs){
         this.logs=logs;
     }
 
-    public void addLog(LogDevice log){
-        this.logs.add(log);
-    }
 
 }

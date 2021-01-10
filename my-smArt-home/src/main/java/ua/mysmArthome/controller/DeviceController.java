@@ -36,12 +36,9 @@ public class DeviceController {
     public String getLogsbyId(@PathVariable(value="id") int id) throws ResourceNotFoundException {
         Device device = deviceRepository.findDeviceByInBrokerId(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Device "+id+" not found"));
-        /*List<LogDevice> logs = device.getLogs();
 
-        for(LogDevice ld : logs){
-            System.out.println(ld.getText());
-        }*/
-        String retorno = "{\"logs\":\"\"}";
+        String logs = device.getLogs();
+        String retorno = "{\"logs\":\""+logs+"\"}";
         return retorno;
     }
 
@@ -83,14 +80,9 @@ public class DeviceController {
         d.setInBroker_id(id);
         d.setName("");
         d.setSmarthome(sm);
-
-        LogDevice log = new LogDevice();
-        log.setDevice(d);
-        log.setText("Device found!");
-        log.setTimedate(getCurrentTime());
-
-        d.addLog(log);
-        logDeviceRepository.save(log);
+        String logs = d.getLogs();
+        logs="<p>[LOG AT "+getCurrentTime()+"] Device Found!</p>" + logs;
+        d.setLogs(logs);
         deviceRepository.save(d);
         List<Device> home_devices = sm.getList_devices();
         home_devices.add(d);
@@ -166,13 +158,34 @@ public class DeviceController {
     
     @CrossOrigin
     @PostMapping("/turnOn")
-    public String turnOnDevice(@RequestParam(value = "id",required = true) String deviceId){
+    public String turnOnDevice(@RequestParam(value = "id",required = true) String deviceId) throws ResourceNotFoundException {
+        Integer id = Integer.valueOf(deviceId);
+        Device d = deviceRepository.findDeviceByInBrokerId(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Device not found for this id :: " + deviceId));
+
+        String logs = d.getLogs();
+        logs="<p>[LOG AT "+getCurrentTime()+"] Device turned on</p>" + logs;
+        d.setLogs(logs);
+
+        deviceRepository.save(d);
+
         return producer.createMessage("turnOn",deviceId);
+
     }
 
     @CrossOrigin
     @PostMapping("/turnOff")
-    public String turnOffDevice(@RequestParam(value = "id",required = true) String deviceId){
+    public String turnOffDevice(@RequestParam(value = "id",required = true) String deviceId) throws ResourceNotFoundException {
+        Integer id = Integer.valueOf(deviceId);
+        Device d = deviceRepository.findDeviceByInBrokerId(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Device not found for this id :: " + deviceId));
+
+        String logs = d.getLogs();
+        logs="<p>[LOG AT "+getCurrentTime()+"] Device turned off</p>" + logs;
+        d.setLogs(logs);
+
+        deviceRepository.save(d);
+
         return producer.createMessage("turnOff",deviceId);
     }
 
