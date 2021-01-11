@@ -1,0 +1,51 @@
+version: '3.3'
+
+services:
+  db:
+    image: mysql:5.7
+    #restart: always
+    environment:
+      MYSQL_DATABASE: 'smarthome'
+      MYSQL_USER: 'user'
+      MYSQL_ROOT_PASSWORD: 'useraccess421'
+      MYSQL_PASSWORD: 'useraccess421'
+    ports:
+      - '3306:3306'
+    expose:
+    # opens port 3306 on the container
+    - '3306'
+  
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: my-rabbit
+    #volumes:
+    #  - ./rabbitmq/etc/definitions.json:/etc/rabbitmq/definitions.json
+    #  - ./rabbitmq/etc/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+    #  - ./rabbitmq/data:/var/lib/rabbitmq/mnesia/rabbit@my-rabbit
+    #  - ./rabbitmq/logs:/var/log/rabbitmq/log
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    environment:
+      AMQP_URL: 'amqp://rabbitmq?connection_attempts=5&retry_delay=5'
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
+
+  web-server:
+    build:
+      context: Web_Server
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - rabbitmq
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:3306/ies
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_USERNAME: Andrefilipe12
+      SPRING_RABBITMQ_HOST: rabbitmq
+    restart: on-failure
+
+volumes:
+  my-db: # names our volume
