@@ -31,21 +31,21 @@ services:
       RABBITMQ_DEFAULT_USER: "guest"
       RABBITMQ_DEFAULT_PASS: "guest"
 
-  web-server:
-    build:
-      context: Web_Server
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
-    depends_on:
-      - db
-      - rabbitmq
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:3306/ies
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_USERNAME: Andrefilipe12
-      SPRING_RABBITMQ_HOST: rabbitmq
-    restart: on-failure
+  #web-server:
+  #  build:
+  #    context: Web_Server
+  #    dockerfile: Dockerfile
+  #  ports:
+  #    - "8080:8080"
+  #  depends_on:
+  #    - db
+  #    - rabbitmq
+  #  environment:
+  #    SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:3306/ies
+  #    SPRING_DATASOURCE_USERNAME: root
+  #    SPRING_DATASOURCE_USERNAME: Andrefilipe12
+  #    SPRING_RABBITMQ_HOST: rabbitmq
+  #  restart: on-failure
 
 volumes:
   my-db: # names our volume
