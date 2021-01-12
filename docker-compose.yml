@@ -41,7 +41,7 @@ services:
       - "8080:8080"
     depends_on:
       - db
-      - rabbit
+      - rabbitmq
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/ies
       SPRING_DATASOURCE_USERNAME: root
