@@ -48,7 +48,7 @@ services:
   #  restart: on-failure
 
   web-server:
-     build:
+    build:
       context: .
       dockerfile: Dockerfile
       ports:
