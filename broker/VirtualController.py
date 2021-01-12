@@ -5,8 +5,7 @@ import json
 import ast
 import time
 import random
-
-
+from datetime import date
 
 class VirtualController():
     def __init__(self):
@@ -22,24 +21,27 @@ class VirtualController():
                 device_ip=ip_parts[0]+"."+ip_parts[1]+"."+ip_parts[2]+"."+str(x)
                 device_id=round(random.random()*9999999)
                 random.shuffle(tipos)
-                self.devices[str(device_id)]={"status":"turned-Off", "ip_":device_ip, "id_":device_id, "type_":tipos[0]}
-
+                self.devices[str(device_id)]={"status":"turned-Off", "ip_":device_ip, "id_":device_id, "type_":tipos[0], "active":date.today()}
+        
+        self.saveFile()
         return self.devices # retorna uma dicionario cujas keys são [ip, ip, ip , ip, ...]
     def checkDevice(self, id):
         if ip in self.devices:
-            return self.devices[id].type
+            return self.devices[id].type_
         return None
 
     def turnOn(self, id):
         if id not in self.devices:
             return None
         self.devices[id]["status"]="turned-On"
+        self.saveFile()
         return True
 
     def turnOff(self, id):
         if id not in self.devices:
             return None
         self.devices[id]["status"]="turned-Off"
+        self.saveFile()
         return True
 
     def setBrightness(self, id, brightness):
@@ -98,6 +100,27 @@ class VirtualController():
         if id not in self.devices:
             return None
         return self.devices[id]["type_"]
+
+    def active(self, id):
+        if id not in self.devices:
+            return None
+        return self.devices[id]["active"]
+    
+    def saveFile(self):
+        retorno='['
+        counter=0
+        for device_id in self.devices:
+            counter+=1
+            device=self.devices[device_id]
+            retorno+='{"id":"'+str(device["id_"])+'", "type":"'+device["type_"]+'", "active":"'+str(device["active"])+'", "status":"'+self.status(str(device["id_"]))+'"}'
+            if counter<len(self.devices.keys()):
+                retorno+=','
+        retorno+=']'
+        retorno='{"devices":'+retorno+'}'
+
+        f=open("db_devices.txt", "wb")
+        f.write(retorno.encode('latin'))
+        f.close()
         
 # tests
 #

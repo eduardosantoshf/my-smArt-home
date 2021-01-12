@@ -34,8 +34,12 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private SmartHomeRepository smarthomeRepository;
     //i think the best way to find the users are username
 
+    @GetMapping("/all")
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }

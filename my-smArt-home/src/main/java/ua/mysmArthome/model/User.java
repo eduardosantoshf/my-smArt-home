@@ -17,8 +17,8 @@ public class User {
     private String phone;
     private String token;
     private List<Integer> homes_id;
+
     public User() {
-        this.homes_id = new ArrayList<>();
     }
 
     public User(String email, String username, String password, String phone_number) {
@@ -93,6 +93,5 @@ public class User {
     public void setHomes_id(List<Integer> homes_id) {
         this.homes_id = homes_id;
     }
-    
 
 }

@@ -23,8 +23,8 @@ class FibonacciRpcClient(object):
             self.response = body
 
     def call(self, n):
-        obj='{"op":"turnOff", "id":"4389807513594906.5"}'
-        #obj='{"op":"hardcheck"}'
+        #obj='{"op":"turnOff", "id":"4389807513594906.5"}'
+        obj='{"op":"hardcheck"}'
         self.response = None
         self.corr_id = str(uuid.uuid4())
         self.channel.basic_publish(
