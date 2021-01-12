@@ -5,15 +5,17 @@ services:
     image: mysql:5.7
     #restart: always
     environment:
-      MYSQL_DATABASE: 'smarthome'
-      MYSQL_USER: 'user'
-      MYSQL_ROOT_PASSWORD: 'useraccess421'
-      MYSQL_PASSWORD: 'useraccess421'
+      MYSQL_DATABASE: 'ies'
+      MYSQL_USER: 'root'
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_PASSWORD: 'root'
     ports:
       - '3306:3306'
-    expose:
+    #expose:
     # opens port 3306 on the container
-    - '3306'
+    #- '3306'
+    volumes:
+      - db-data:/var/lib/mysql
   
   rabbitmq:
     image: rabbitmq:3-management
@@ -31,28 +33,35 @@ services:
         #RABBITMQ_DEFAULT_USER: "guest"
         #RABBITMQ_DEFAULT_PASS: "guest"
 
-  #web-server:
-  #  build:
-  #    context: Web_Server
-  #    dockerfile: Dockerfile
-  #  ports:
-  #    - "8080:8080"
-  #  depends_on:
-  #    - db
-  #    - rabbitmq
-  #  environment:
-  #    SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:3306/ies
-  #    SPRING_DATASOURCE_USERNAME: root
-  #    SPRING_DATASOURCE_USERNAME: Andrefilipe12
-  #    SPRING_RABBITMQ_HOST: rabbitmq
-  #  restart: on-failure
-
-  web-server:
+  backend:
     build:
-      context: .
+      context: my-smArt-home
       dockerfile: Dockerfile
     ports:
-      - '8080:80'
+      - "8080:8080"
+    depends_on:
+      - db
+      - rabbit
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/ies
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_RABBITMQ_HOST: rabbitmq
+    restart: on-failure
+
+  client:
+    build:
+      context: web_site
+      dockerfile: Dockerfile
+    ports:
+      - '80:80'
+    depends_on:
+      - db
+      - rabbitmq
+    volumes:
+      - ./src:/etc/share/nginx/html
+    environment: 
+      SERVER_IP: backend
 
 volumes:
   my-db: # names our volume
