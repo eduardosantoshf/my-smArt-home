@@ -69,7 +69,7 @@ public class Device {
         return "Device{" + "id=" + id + ", name=" + name + ", smarthome=" + smarthome + '}';
     }
 
-    @Column(name = "logs", nullable = false)
+    @Column(name = "logs", nullable = false, length = 4096)
     public String getLogs(){
         return this.logs;
     }

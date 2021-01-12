@@ -61,13 +61,6 @@ class Generator:
             ip=command["id"]
             retorno=self.VirtualDevices.turnOn(ip)
             response='{"result":true, "status":"turned-on"}'
-            
-            f=open('db_devices.txt','rb')
-            file=f.read()
-            devices=json.loads(file)
-            devices=devices["devices"]
-            print(devices)
-            
         elif command["op"]=="turnOff": # turn off an especific device, so it need to specify the id
             ip=command["id"]
             retorno=self.VirtualDevices.turnOff(ip)

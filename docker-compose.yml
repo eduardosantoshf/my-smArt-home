@@ -26,10 +26,10 @@ services:
     ports:
       - '5672:5672'
       - '15672:15672'
-    environment:
-      AMQP_URL: 'amqp://rabbitmq?connection_attempts=5&retry_delay=5'
-      RABBITMQ_DEFAULT_USER: "guest"
-      RABBITMQ_DEFAULT_PASS: "guest"
+        #environment:
+        #AMQP_URL: 'amqp://rabbitmq?connection_attempts=5&retry_delay=5'
+        #RABBITMQ_DEFAULT_USER: "guest"
+        #RABBITMQ_DEFAULT_PASS: "guest"
 
   #web-server:
   #  build:

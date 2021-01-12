@@ -13,9 +13,16 @@ class Generator:
 
     def randomInfo(self):
         # escolher aleatoriamente um tipo de device
-        devices=self.devices
-        if len(self.devices):
+        f=open("db_devices.txt", "rb")
+        content=f.read()
+        content=json.loads(content.decode('latin'))
+        devices=content["devices"]
+        devices=[d for d in devices if d["status"]=="turned-On"]
+        print("Devices:")
+        print(devices)
+        if len(devices)>0:
             random.shuffle(devices)
+            
             device=devices[0]
             retorno=""
             if device["type"]=="humidity" or device["type"]=="termal" or device["type"]=="proximity":
@@ -31,7 +38,7 @@ class Generator:
             self.channel.basic_publish(exchange = 'logs', routing_key = '', body = '{"id":"-1", "property":{"name":"none", "value":"none"}}')
 
 if __name__ == "__main__":
-    f=open("db_exemplo.txt", "rb")
+    f=open("db_devices.txt", "rb")
     content=f.read()
     content=json.loads(content.decode('latin'))
 
