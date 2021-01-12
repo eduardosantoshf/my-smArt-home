@@ -161,3 +161,15 @@ function changeState(operation, device_id){
         }
     });
 }
+
+
+setInterval(function(){
+    console.log(localStorage.getItem("user_home"))
+    $.ajax(EndSer+"smartHome/notifications/"+localStorage.getItem("user_home"),{
+        type:'GET',
+        success: function(data, status, xhr){
+            
+            console.log(xhr.status)
+        }
+    });
+}, 3000);
