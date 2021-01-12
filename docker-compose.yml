@@ -47,5 +47,10 @@ services:
   #    SPRING_RABBITMQ_HOST: rabbitmq
   #  restart: on-failure
 
+  web-server:
+    dockerfile: Dockerfile
+    ports:
+      - '8080:80'
+
 volumes:
   my-db: # names our volume
