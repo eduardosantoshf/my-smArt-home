@@ -2,24 +2,26 @@ version: '3.3'
 
 services:
   db:
-    image: mysql:5.7
+    image: mysql
     #restart: always
     environment:
       MYSQL_DATABASE: 'ies'
-      MYSQL_USER: 'root'
+      MYSQL_USER: 'demo'
       MYSQL_ROOT_PASSWORD: 'root'
       MYSQL_PASSWORD: 'root'
     ports:
       - '3306:3306'
+    #volumes:
+      #- db-data1:/var/lib/mysql
+      #- ./mysql.sql:/docker-entrypoint-initdb.d/mysql.sql
     #expose:
     # opens port 3306 on the container
     #- '3306'
-    #volumes:
-            # - db-data:/var/lib/mysql:rw
+
   
   rabbitmq:
     image: rabbitmq:3-management
-    hostname: my-rabbit
+    hostname: rabbitmq
     #volumes:
     #  - ./rabbitmq/etc/definitions.json:/etc/rabbitmq/definitions.json
     #  - ./rabbitmq/etc/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
@@ -28,10 +30,6 @@ services:
     ports:
       - '5672:5672'
       - '15672:15672'
-        #environment:
-        #AMQP_URL: 'amqp://rabbitmq?connection_attempts=5&retry_delay=5'
-        #RABBITMQ_DEFAULT_USER: "guest"
-        #RABBITMQ_DEFAULT_PASS: "guest"
 
   backend:
     build:
@@ -47,7 +45,7 @@ services:
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
       SPRING_RABBITMQ_HOST: rabbitmq
-    restart: on-failure
+    #restart: on-failure
 
   client:
     build:
@@ -63,5 +61,16 @@ services:
     environment: 
       SERVER_IP: backend
 
+  #nginx:
+  #  image: nginx:latest
+  #  volumes:
+  #    - ./nginx.conf:/etc/nginx/nginx.conf
+  #    - ./web_site:/usr/share/nginx/html
+  #  ports:
+  #    - 8081:8081
+  #  depends_on:
+  #    - db
+  #    - rabbitmq
+
 volumes:
-  my-db: # names our volume
+  db-data1: # names our volume

@@ -23,7 +23,7 @@ public class Consumer {
     public Consumer() {
         notifications = new HashMap<String,ArrayList<String>>();
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("localhost");
+        factory.setHost("rabbitmq");
 
         try {
             connection = factory.newConnection();
