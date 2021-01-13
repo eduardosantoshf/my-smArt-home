@@ -138,10 +138,8 @@ function openLogs(device_id){
         $("#logs_"+device_id).css("display", "table-cell");
         $("#logBtn_"+device_id).get(0).src='images/up_arrow.png';
 
-        // TODO: REQUEST LOGS
         $.ajax(EndSer+"device/logs/"+device_id,{
             type:'GET',
-            data:{username:username},
             success: function(data, status, xhr){
                 var obj = JSON.parse(data);
                 $("#logs_"+device_id).html(obj.logs);
@@ -164,12 +162,12 @@ function changeState(operation, device_id){
 
 
 setInterval(function(){
-    console.log(localStorage.getItem("user_home"))
-    $.ajax(EndSer+"smartHome/notifications/"+localStorage.getItem("user_home"),{
+    username=localStorage.getItem("username");
+    $.ajax(EndSer+"notifications/getAll/"+username,{
         type:'GET',
         success: function(data, status, xhr){
             
-            console.log(xhr.status)
+            console.log(data)
         }
     });
 }, 3000);

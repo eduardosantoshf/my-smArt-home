@@ -9,7 +9,6 @@ import ua.mysmArthome.exception.ResourceNotFoundException;
 import ua.mysmArthome.model.*;
 import ua.mysmArthome.rabbitmq.producer.RpcProducer;
 import ua.mysmArthome.repository.DeviceRepository;
-import ua.mysmArthome.repository.LogDeviceRepository;
 import ua.mysmArthome.repository.SmartHomeRepository;
 import ua.mysmArthome.repository.UserRepository;
 import java.time.format.DateTimeFormatter;
@@ -26,9 +25,6 @@ public class DeviceController {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private LogDeviceRepository logDeviceRepository;
 
     private RpcProducer producer = new RpcProducer();
 
@@ -80,6 +76,7 @@ public class DeviceController {
         d.setInBroker_id(id);
         d.setName("");
         d.setSmarthome(sm);
+        d.setList_notifications(new ArrayList<>());
         String logs = d.getLogs();
         logs="<p>[LOG AT "+getCurrentTime()+"] Device Found!</p>" + logs;
         d.setLogs(logs);
@@ -210,10 +207,6 @@ public class DeviceController {
 
         // clean previous devices
         SmartHome sm = smartHomeRepository.findHomeById(home_id).orElseThrow(() -> new ResourceNotFoundException("Home " + home_id + " not found"));
-        Logs log = new Logs();
-        log.setTimedate(getCurrentTime());
-        log.setText("All older devices ware removed!");
-        sm.addLog(log);
 
         for(Device d : sm.getList_devices()){
             deviceRepository.delete(d);

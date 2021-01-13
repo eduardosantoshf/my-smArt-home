@@ -1,6 +1,8 @@
 package ua.mysmArthome.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.beans.factory.annotation.Autowired;
+import ua.mysmArthome.repository.NotificationRepository;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ public class Device {
     private SmartHome smarthome;
     private int inBroker_id;
     private String logs="";
+    private List<Notification> list_notifications;
 
     public Device() {
     }
@@ -55,7 +58,6 @@ public class Device {
 
     @ManyToOne
     @JoinColumn(name="smartHome_id")
-
     public SmartHome getSmarthome() {
         return smarthome;
     }
@@ -77,5 +79,18 @@ public class Device {
         this.logs=logs;
     }
 
+    @OneToMany(mappedBy = "device")
+    @JsonIgnore
+    public List<Notification> getList_notifications() {
+        List<Notification> n = this.list_notifications;
+        this.list_notifications.clear();
+        return n;
+    }
+    public void setList_notifications(List<Notification> list_devices) {
+        this.list_notifications = list_devices;
+    }
 
+    public void addListNotification(Notification n){
+        this.list_notifications.add(n);
+    }
 }
