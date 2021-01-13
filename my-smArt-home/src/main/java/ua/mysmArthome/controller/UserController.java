@@ -23,9 +23,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ua.mysmArthome.exception.ResourceNotFoundException;
+import ua.mysmArthome.model.SmartHome;
 import ua.mysmArthome.model.User;
-import ua.mysmArthome.model.Admin;
-import ua.mysmArthome.repository.AdminRepository;
+import ua.mysmArthome.repository.SmartHomeRepository;
 import ua.mysmArthome.repository.UserRepository;
 
 @RestController
@@ -36,7 +36,7 @@ public class UserController {
     private UserRepository userRepository;
 
     @Autowired
-    private AdminRepository adminRepostiory;
+    private SmartHomeRepository smarthomeRepository;
     //i think the best way to find the users are username
 
     @GetMapping("/all")
@@ -58,18 +58,9 @@ public class UserController {
         return ResponseEntity.ok().body(user);
     }
 
-    @RequestMapping(value = "/admin/{id}", method = RequestMethod.GET)
-    public List<User> getUserByAdminId(@PathVariable int id) throws ResourceNotFoundException {
-        if (adminRepostiory.findAdminById(id).isEmpty()) {
-            throw new ResourceNotFoundException("Not Found");
-        }
-        return userRepository.findUserByAdminId(id);
-    }
-
-    @PostMapping("/post/{id_admin}/user")
-    public void createUser(@PathVariable int id_admin, @Valid @RequestBody User user) throws ResourceNotFoundException {
-        System.out.println(this.getRegister(user.getEmail(), user.getUsername(), user.getPassword(), "password", user.getPhone(),
-                adminRepostiory.findById(id_admin).get()));
+    @PostMapping("/post/{confirm}")
+    public void createUser(@PathVariable String confirm, @Valid @RequestBody User user) throws ResourceNotFoundException {
+        System.out.println(this.getRegister(user.getEmail(), user.getUsername(), user.getPassword(), confirm, user.getPhone()));
     }
 
     @PutMapping("/{username}")
@@ -118,7 +109,7 @@ public class UserController {
                 //
                 user.setToken(generatedString);
                 userRepository.save(user);
-                return "{\"status\": true, \"token\":" + generatedString + "}"; //send token for login
+                return "{\"status\": true, \"token\": \"" + generatedString + "\"}"; //send token for login
             }
 
         }
@@ -127,19 +118,18 @@ public class UserController {
 
     @CrossOrigin
     @PostMapping("/register")
-    public String getRegister(String email, String username, String pwd, String confirmPwd, String phone_number, Admin admin) throws ResourceNotFoundException {
+    public String getRegister(String email, String username, String pwd, String confirmPwd, String phone_number) throws ResourceNotFoundException {
         if (userRepository.findUserByUsername(username).isPresent()) {
             return "{\"status\":false,\"reason\":\"User already exists\"}";
         }
         if (pwd.equals(confirmPwd)) {
             User user = new User(email, username, pwd, phone_number);
-            user.setAdmin(admin);
             //need to generate a token
             String generatedString = generateToken();
             //
             user.setToken(generatedString);
             userRepository.save(user);
-            return "{\"status\":true, \"token\":" + generatedString + "}";
+            return "{\"status\":true, \"token\":\"" + generatedString + "\"}";
         }
         return "{\"status\":false,\"reason\":\"Register not successfull\"}";
     }
@@ -158,6 +148,19 @@ public class UserController {
                 .toString();
         return generatedString;
         //
+    }
+
+    @CrossOrigin
+    @PostMapping("/smarthome")
+    public void createSmarthomeUser(String username) throws ResourceNotFoundException {
+        User activeUser = userRepository.findUserByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User " + username + " not found"));
+        List<Integer> user_sm = activeUser.getHomes_id();
+        SmartHome sm = new SmartHome("casa");
+        smarthomeRepository.save(sm);
+        user_sm.add(sm.getId());
+        activeUser.setHomes_id(user_sm);
+        userRepository.save(activeUser);
     }
 
 }

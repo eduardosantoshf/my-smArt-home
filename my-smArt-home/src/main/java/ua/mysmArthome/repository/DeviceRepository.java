@@ -18,6 +18,9 @@ public interface DeviceRepository extends JpaRepository<Device, Integer>{
     @Query("Select t from Device t where t.id=:id")
     Optional<Device> findDeviceById(@Param("id") int id);
 
+    @Query("Select t from Device t where t.inBroker_id=:id")
+    Optional<Device> findDeviceByInBrokerId(@Param("id") int id);
+
     @Query("Select t from Device t where t.name=:name")
     Optional<Device> findDeviceByName(@Param("name") String name);
     
