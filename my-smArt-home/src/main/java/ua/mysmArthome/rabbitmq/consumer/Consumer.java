@@ -31,7 +31,7 @@ public class Consumer {
     public Consumer() throws ResourceNotFoundException {
         notifications = new HashMap<String,ArrayList<String>>();
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("localhost");
+        factory.setHost("rabbitmq");
 
         try {
             connection = factory.newConnection();
