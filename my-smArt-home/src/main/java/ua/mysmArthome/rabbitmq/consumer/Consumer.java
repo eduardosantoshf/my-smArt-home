@@ -31,7 +31,7 @@ public class Consumer {
     public Consumer() throws ResourceNotFoundException {
         notifications = new HashMap<String,ArrayList<String>>();
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("rabbitmq");
+        factory.setHost("localhost");
 
         try {
             connection = factory.newConnection();
@@ -76,8 +76,10 @@ public class Consumer {
             String not="";
             boolean harmful=false;
             double val;
+
             //{"property":{"name":"humidity","value":"35.547279816907306"},"id":"8997506"}
-            System.out.println("tipo: "+ obj.getJSONObject("property").getString("name"));
+            //System.out.println("tipo: "+ obj.getJSONObject("property").getString("name"));
+
             switch(obj.getJSONObject("property").getString("name")){
 
                 case "humidity":
@@ -150,7 +152,7 @@ public class Consumer {
 
                 default:break;
             }
-            System.out.println(" [x] Received '" + message + "'");
+            //System.out.println(" [x] Received '" + message + "'");
 
         };//a callback in the form of an object that will buffer the messages until we're ready to use them
 
@@ -164,7 +166,9 @@ public class Consumer {
     }
 
     public HashMap<String, ArrayList<String>> getNotifications() {
-        return notifications;
+        HashMap<String, ArrayList<String>> temp = notifications;
+        notifications = new HashMap<String, ArrayList<String>>();
+        return temp;
     }
 
     /*<String> getNotifications(String id){

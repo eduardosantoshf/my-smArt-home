@@ -67,6 +67,12 @@ public class NotificationController {
                 retorno+=",";
         }
         retorno+="]}";
+        for(Device d : sm.getList_devices()){
+            d.clearNotifications();
+            deviceRepository.save(d);
+            notificationRepository.deleteAllByDevice(d);
+        }
+
         return retorno;
     }
 
@@ -74,6 +80,7 @@ public class NotificationController {
         System.out.println("WAS CALLED");
 
         Map<String, ArrayList<String>> notifications = consumer.getNotifications();
+
         for(String device_id : notifications.keySet()){
             Device d = deviceRepository.findDeviceByInBrokerId(Integer.valueOf(device_id)).orElseThrow(() -> new ResourceNotFoundException("Device "+device_id+" not found"));
 
@@ -81,7 +88,7 @@ public class NotificationController {
                 Notification n = new Notification();
                 n.setData(LocalDateTime.now());
                 n.setDevice(d);
-                n.setValue("New alarm: " + s);
+                n.setValue("New alarm1: " + s);
                 notificationRepository.save(n);
 
                 String logs = d.getLogs();
@@ -90,11 +97,7 @@ public class NotificationController {
                     logs="<p>[LOG AT "+getCurrentTime()+"] logs cleaned</p>";
                 d.setLogs(logs);
 
-                List<Notification> nots = d.getList_notifications();
-                nots.add(n);
-                System.out.println(nots.size());
-                d.setList_notifications(nots);
-                //d.addListNotification(n);
+                d.addListNotification(n);
 
                 deviceRepository.save(d);
             }

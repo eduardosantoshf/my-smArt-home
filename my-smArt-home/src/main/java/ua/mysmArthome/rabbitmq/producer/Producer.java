@@ -9,7 +9,7 @@ public class Producer {
     public static void main(String[] argv) throws Exception {
         ConnectionFactory factory = new ConnectionFactory(); 
         //if we wanted to connect to a node on a different machine just specify its hostname and IP
-        factory.setHost("rabbitmq");
+        factory.setHost("localhost");
 
         try (Connection connection = factory.newConnection();
             Channel channel = connection.createChannel()) {

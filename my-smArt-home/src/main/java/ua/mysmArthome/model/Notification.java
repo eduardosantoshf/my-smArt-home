@@ -12,6 +12,7 @@ public class Notification {
     private String value;
     private Device device;
     private LocalDateTime data;
+    private boolean seen;
 
 
     public Notification() {
@@ -44,6 +45,15 @@ public class Notification {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    @Column(name = "seen", nullable = false)
+    public boolean getSeen() {
+        return seen;
+    }
+
+    public void setSeen(boolean seen) {
+        this.seen = seen;
     }
 
     @ManyToOne

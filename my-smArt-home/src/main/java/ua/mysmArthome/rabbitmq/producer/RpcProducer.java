@@ -20,7 +20,7 @@ public class RpcProducer implements AutoCloseable {
 
     public RpcProducer() {
         ConnectionFactory factory = new ConnectionFactory(); // connect to rabbitmq
-        factory.setHost("rabbitmq");
+        factory.setHost("localhost");
 
         try {
             connection = factory.newConnection();

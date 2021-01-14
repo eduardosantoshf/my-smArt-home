@@ -79,11 +79,10 @@ public class Device {
         this.logs=logs;
     }
 
-    @OneToMany(mappedBy = "device")
+    @OneToMany(mappedBy = "device", cascade=CascadeType.REMOVE)
     @JsonIgnore
     public List<Notification> getList_notifications() {
         List<Notification> n = this.list_notifications;
-        this.list_notifications.clear();
         return n;
     }
     public void setList_notifications(List<Notification> list_devices) {
@@ -92,5 +91,9 @@ public class Device {
 
     public void addListNotification(Notification n){
         this.list_notifications.add(n);
+    }
+
+    public void clearNotifications(){
+        this.list_notifications = new ArrayList<>();
     }
 }

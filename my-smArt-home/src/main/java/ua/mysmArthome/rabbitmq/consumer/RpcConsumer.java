@@ -9,7 +9,7 @@ public class RpcConsumer {
 
     public static void main(String[] argv) throws Exception {
         ConnectionFactory factory = new ConnectionFactory(); //connection to rabbitmq
-        factory.setHost("rabbitmq");
+        factory.setHost("localhost");
 
         try (Connection connection = factory.newConnection();
              Channel channel = connection.createChannel()) {

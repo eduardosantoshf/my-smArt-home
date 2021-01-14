@@ -213,6 +213,7 @@ public class DeviceController {
         }
 
         String retorno = producer.createMessage("hardcheck", id);
+
         return retorno;
     }
 
