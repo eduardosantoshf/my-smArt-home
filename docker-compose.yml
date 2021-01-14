@@ -42,10 +42,10 @@ services:
       - rabbitmq
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/ies
-      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_USERNAME: demo
       SPRING_DATASOURCE_PASSWORD: root
       SPRING_RABBITMQ_HOST: rabbitmq
-    #restart: on-failure
+    restart: on-failure
 
   client:
     build:
