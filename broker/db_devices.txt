@@ -1,1 +1,1 @@
-{"devices":[{"id":"4020534", "type":"alarm", "active":"2021-01-14", "status":"turned-Off"}]}
+{"devices":[{"id":"4043525", "type":"plug", "active":"2021-01-14", "status":"turned-Off"},{"id":"7123587", "type":"humidity", "active":"2021-01-14", "status":"turned-On"}]}

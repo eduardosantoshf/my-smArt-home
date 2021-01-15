@@ -9,6 +9,7 @@ import ua.mysmArthome.exception.ResourceNotFoundException;
 import ua.mysmArthome.model.*;
 import ua.mysmArthome.rabbitmq.producer.RpcProducer;
 import ua.mysmArthome.repository.DeviceRepository;
+import ua.mysmArthome.repository.LogsRepository;
 import ua.mysmArthome.repository.SmartHomeRepository;
 import ua.mysmArthome.repository.UserRepository;
 import java.time.format.DateTimeFormatter;
@@ -26,6 +27,9 @@ public class DeviceController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private LogsRepository logsRepository;
+
     private RpcProducer producer = new RpcProducer();
 
     @GetMapping("/logs/{id}")
@@ -33,8 +37,13 @@ public class DeviceController {
         Device device = deviceRepository.findDeviceByInBrokerId(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Device "+id+" not found"));
 
-        String logs = device.getLogs();
-        String retorno = "{\"logs\":\""+logs+"\"}";
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        String retorno = "{\"logs\":\"";
+        List<Log> logs = device.getLogs();
+        for(Log l : logs){
+            retorno+="<p>[LOG AT "+dtf.format(l.getData())+"] "+l.getValue()+"</p>";
+        }
+        retorno += "\"}";
         return retorno;
     }
 
@@ -77,13 +86,22 @@ public class DeviceController {
         d.setName("");
         d.setSmarthome(sm);
         d.setList_notifications(new ArrayList<>());
-        String logs = d.getLogs();
-        logs="<p>[LOG AT "+getCurrentTime()+"] Device Found!</p>" + logs;
-        d.setLogs(logs);
+        d.setLogs(new ArrayList<>());
+        deviceRepository.save(d);
+
+        Log l = new Log();
+        l.setDevice(d);
+        l.setValue("<p>[LOG AT "+getCurrentTime()+"] Device Found!</p>");
+        l.setData(LocalDateTime.now());
+        logsRepository.save(l);
+
+        d.addListLogs(l);
+
         deviceRepository.save(d);
         List<Device> home_devices = sm.getList_devices();
         home_devices.add(d);
         sm.setList_devices(home_devices);
+
         smartHomeRepository.save(sm);
         return d;
     }
@@ -94,8 +112,6 @@ public class DeviceController {
         Device device = deviceRepository.findDeviceById(deviceId)
                 .orElseThrow(()->new ResourceNotFoundException("Device "+deviceId+" not found"));
         device.setName(deviceDetails.getName());
-        /*device.setStatus(deviceDetails.getStatus());
-        device.setType(deviceDetails.getType());*/
         final Device f_device = deviceRepository.save(device);
         return ResponseEntity.ok(f_device);
     }
@@ -160,9 +176,12 @@ public class DeviceController {
         Device d = deviceRepository.findDeviceByInBrokerId(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Device not found for this id :: " + deviceId));
 
-        String logs = d.getLogs();
-        logs="<p>[LOG AT "+getCurrentTime()+"] Device turned on</p>" + logs;
-        d.setLogs(logs);
+        Log l = new Log();
+        l.setDevice(d);
+        l.setValue("status:turned-on");
+        l.setData(LocalDateTime.now());
+        logsRepository.save(l);
+        d.addListLogs(l);
 
         deviceRepository.save(d);
 
@@ -177,9 +196,12 @@ public class DeviceController {
         Device d = deviceRepository.findDeviceByInBrokerId(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Device not found for this id :: " + deviceId));
 
-        String logs = d.getLogs();
-        logs="<p>[LOG AT "+getCurrentTime()+"] Device turned off</p>" + logs;
-        d.setLogs(logs);
+        Log l = new Log();
+        l.setDevice(d);
+        l.setValue("status:turned-off");
+        l.setData(LocalDateTime.now());
+        logsRepository.save(l);
+        d.addListLogs(l);
 
         deviceRepository.save(d);
 

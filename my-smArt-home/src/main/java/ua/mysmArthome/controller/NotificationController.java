@@ -9,10 +9,8 @@ import ua.mysmArthome.exception.ResourceNotFoundException;
 import ua.mysmArthome.model.*;
 import ua.mysmArthome.rabbitmq.consumer.Consumer;
 import ua.mysmArthome.rabbitmq.producer.RpcProducer;
-import ua.mysmArthome.repository.DeviceRepository;
-import ua.mysmArthome.repository.NotificationRepository;
-import ua.mysmArthome.repository.SmartHomeRepository;
-import ua.mysmArthome.repository.UserRepository;
+import ua.mysmArthome.repository.*;
+
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 
@@ -31,6 +29,9 @@ public class NotificationController {
     @Autowired
     private NotificationRepository notificationRepository;
 
+    @Autowired
+    private LogsRepository logsRepository;
+
     private Consumer consumer = new Consumer();
 
     public NotificationController() throws ResourceNotFoundException {
@@ -39,7 +40,7 @@ public class NotificationController {
     @CrossOrigin
     @GetMapping("/getAll/{username}")
     public String getAll(@PathVariable(value = "username") String username) throws ResourceNotFoundException {
-        loadNotifications();
+        loadNotifications();loadLogs();
         String id="";
         Integer home_id = userRepository.findHomesByUsername(username).getHomes_id().get(0);
         id=String.valueOf(home_id);
@@ -77,7 +78,6 @@ public class NotificationController {
     }
 
     private void loadNotifications() throws ResourceNotFoundException {
-        System.out.println("WAS CALLED");
 
         Map<String, ArrayList<String>> notifications = consumer.getNotifications();
 
@@ -91,13 +91,28 @@ public class NotificationController {
                 n.setValue("New alarm1: " + s);
                 notificationRepository.save(n);
 
-                String logs = d.getLogs();
-                logs="<p>[LOG AT "+getCurrentTime()+"] "+s+"</p>" + logs;
-                if(logs.length()> 4000)
-                    logs="<p>[LOG AT "+getCurrentTime()+"] logs cleaned</p>";
-                d.setLogs(logs);
-
                 d.addListNotification(n);
+
+                deviceRepository.save(d);
+            }
+        }
+    }
+
+    private void loadLogs() throws ResourceNotFoundException {
+
+        Map<String, ArrayList<String>> logs = consumer.getLogs();
+
+        for(String device_id : logs.keySet()){
+            Device d = deviceRepository.findDeviceByInBrokerId(Integer.valueOf(device_id)).orElseThrow(() -> new ResourceNotFoundException("Device "+device_id+" not found"));
+
+            for(String s : logs.get(device_id)){
+                Log l = new Log();
+                l.setDevice(d);
+                l.setData(LocalDateTime.now());
+                l.setValue(s);
+                logsRepository.save(l);
+
+                d.addListLogs(l);
 
                 deviceRepository.save(d);
             }

@@ -27,9 +27,12 @@ public class Consumer {
     private Connection connection;
     private Channel channel;
     private HashMap<String, ArrayList<String>> notifications;
+    private HashMap<String, ArrayList<String>> logs;
 
     public Consumer() throws ResourceNotFoundException {
         notifications = new HashMap<String,ArrayList<String>>();
+        logs = new HashMap<String,ArrayList<String>>();
+
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
 
@@ -76,9 +79,7 @@ public class Consumer {
             String not="";
             boolean harmful=false;
             double val;
-
-            //{"property":{"name":"humidity","value":"35.547279816907306"},"id":"8997506"}
-            //System.out.println("tipo: "+ obj.getJSONObject("property").getString("name"));
+            String device_id=obj.getString("id");
 
             switch(obj.getJSONObject("property").getString("name")){
 
@@ -90,10 +91,7 @@ public class Consumer {
                     }else
                         not+="normal condition";
 
-                    if (!notifications.containsKey(obj.getString("id")) )
-                        notifications.put(obj.getString("id"), new ArrayList<>());
-
-                    notifications.get(obj.getString("id")).add(not);
+                    addLog(device_id, obj.getJSONObject("property").getString("value"));
                     break;
 
                 case "termal":
@@ -104,10 +102,7 @@ public class Consumer {
                     }else
                         not+="normal condition";
 
-                    if (!notifications.containsKey(obj.getString("id")) )
-                        notifications.put(obj.getString("id"), new ArrayList<>());
-
-                    notifications.get(obj.getString("id")).add(not);
+                    addLog(device_id, obj.getJSONObject("property").getString("value"));
                     break;
 
                 case "proximity":
@@ -115,44 +110,46 @@ public class Consumer {
                     if(val<20){
                         not+="harmful "+obj.getJSONObject("property").getString("value")+" meters from sensor";
                         harmful=true;
-                    }else
-                        not+="normal condition";
+                    }else {
+                        not += "normal condition";
+                        addLog(device_id, "False");
+                    }
+                    addLog(device_id, obj.getJSONObject("property").getString("value"));
 
-                    if (!notifications.containsKey(obj.getString("id")) )
-                        notifications.put(obj.getString("id"), new ArrayList<>());
-
-                    notifications.get(obj.getString("id")).add(not);
                     break;
 
                 case "alarm":
                     if(obj.getJSONObject("property").getString("value").equals("True")){
                         not+="harmful, alarm is ringing";
                         harmful=true;
-                    }else
-                        not+="normal condition";
-
-                    if (!notifications.containsKey(obj.getString("id")) )
-                        notifications.put(obj.getString("id"), new ArrayList<>());
-
-                    notifications.get(obj.getString("id")).add(not);
+                        addLog(device_id, "True");
+                    }else {
+                        not += "normal condition";
+                        addLog(device_id, "False");
+                    }
                     break;
 
                 case "door":
                     if(obj.getJSONObject("property").getString("value").equals("True")){
-                        not+="harmful, door is ringing";
+                        not+="harmful, door bell is ringing";
                         harmful=true;
-                    }else
-                        not+="normal condition";
+                        addLog(device_id, "True");
+                    }else {
+                        not += "normal condition";
+                        addLog(device_id, "False");
+                    }
 
-                    if (!notifications.containsKey(obj.getString("id")) )
-                        notifications.put(obj.getString("id"), new ArrayList<>());
-
-                    notifications.get(obj.getString("id")).add(not);
                     break;
 
                 default:break;
             }
-            //System.out.println(" [x] Received '" + message + "'");
+
+            if(harmful){
+                if (!notifications.containsKey(obj.getString("id")) )
+                    notifications.put(obj.getString("id"), new ArrayList<>());
+
+                notifications.get(obj.getString("id")).add(not);
+            }
 
         };//a callback in the form of an object that will buffer the messages until we're ready to use them
 
@@ -165,17 +162,22 @@ public class Consumer {
         //{"status":"harmful | normal", "id":"id_do_device", "property":{"name":"humidity", "value":"80"}}
     }
 
+    public void addLog(String device_id, String value){
+        if (!logs.containsKey(device_id) )
+            logs.put(device_id, new ArrayList<>());
+
+        logs.get(device_id).add(value);
+    }
+
     public HashMap<String, ArrayList<String>> getNotifications() {
         HashMap<String, ArrayList<String>> temp = notifications;
         notifications = new HashMap<String, ArrayList<String>>();
         return temp;
     }
 
-    /*<String> getNotifications(String id){
-        //get notifications of a certain device
-        ArrayList<String> notificationsToSend = notifications.get(id);
-
-        notifications.put(id, new ArrayList<String>());
-        return notificationsToSend;
-    }*/
+    public HashMap<String, ArrayList<String>> getLogs() {
+        HashMap<String, ArrayList<String>> temp = logs;
+        logs = new HashMap<String, ArrayList<String>>();
+        return temp;
+    }
 }
