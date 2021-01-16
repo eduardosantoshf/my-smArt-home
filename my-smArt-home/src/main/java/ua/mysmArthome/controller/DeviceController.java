@@ -305,13 +305,16 @@ public class DeviceController {
         retorno += "{\"logs\":[";
 
         int count = 0;
+        int expected_length = d_logs.size();
         for(Log l : d_logs){
-            count++;
-            if(l.getValue().contains("status") || l.getValue().contains("Device Found"))
+            if(l.getValue().contains("status") || l.getValue().contains("Device Found")){
+                expected_length--;
                 continue;
+            }
+            count++;
 
             retorno+="{\"data\":\""+dtf.format(l.getData())+"\", \"value\":"+l.getValue()+"}";
-            if(count<d_logs.size() )
+            if(count<expected_length )
                 retorno+=",";
         }
         retorno += "]}";

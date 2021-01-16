@@ -10,7 +10,7 @@ function initLogin(){
     const url=EndSer+'user/login';
     if(username!=null){
         $.ajax(url,{
-            type:'POST',
+            type:'GET',
             data:{username: username, pwd:virtualKey},
             success: function(data, status, xhr){
                 var obj=JSON.parse(data);
@@ -29,7 +29,7 @@ function initRegister(){
     const url=EndSer+'user/login';
     if(username!=null){
         $.ajax(url,{
-            type:'POST',
+            type:'GET',
             data:{username: username, pwd:virtualKey},
             success: function(data, status, xhr){
                 var obj=JSON.parse(data);
@@ -47,7 +47,7 @@ function initDashboard(){
     const url=EnsSer+'user/login';
     if(username!=null){
         $.ajax(url,{
-            type:'POST',
+            type:'GET',
             data:{username: username, pwd:virtualKey},
             success: function(data, status, xhr){
                 var obj=JSON.parse(data);
