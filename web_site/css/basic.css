@@ -1,0 +1,10 @@
+
+.mynots{
+    padding: 5px;
+}
+
+.mynots div{
+    padding: 5px;
+    color: white;
+    font-weight: bold;
+}

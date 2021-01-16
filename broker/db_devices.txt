@@ -1,1 +1,1 @@
-{"devices":[{"id":"2791195", "type":"alarm", "active":"2021-01-12", "status":"turned-On"}]}
+{"devices":[{"id":"4823469", "type":"light", "active":"2021-01-16", "status":"turned-Off"},{"id":"1353480", "type":"alarm", "active":"2021-01-16", "status":"turned-Off"}]}
