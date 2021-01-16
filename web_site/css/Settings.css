@@ -126,24 +126,3 @@ body{
   width: 100%;
 }
 
-.mynots{
-    padding: 5px;
-}
-
-.mynots div{
-    padding: 5px;
-    color: white;
-    font-weight: bold;
-}
-
-.mynots{
-  padding:5px;
-  display: flex;
-  flex-direction: column;
-}
-
-.mynots div{
-  padding: 5px;
-  color: white;
-  font-weight: bold;
-}

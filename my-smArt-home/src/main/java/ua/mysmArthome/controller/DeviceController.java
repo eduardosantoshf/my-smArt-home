@@ -271,7 +271,11 @@ public class DeviceController {
         d_act = obj.getString("active_since");
 
         List<Log> d_logs = device.getLogs();
-        List<Log> d_logs_temp =d_logs;
+        List<Log> d_logs_temp =new ArrayList<>();
+        for(Log l : d_logs)
+            if(!l.getValue().contains("Device") && !l.getValue().contains("status"))
+                d_logs_temp.add(l);
+
         Collections.reverse(d_logs_temp);
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         //type, current_value, status, active_since, logs

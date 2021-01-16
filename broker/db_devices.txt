@@ -1,1 +1,1 @@
-{"devices":[{"id":"8922843", "type":"humidity", "active":"2021-01-16", "status":"turned-Off"},{"id":"3789363", "type":"termal", "active":"2021-01-16", "status":"turned-On"},{"id":"2642331", "type":"door", "active":"2021-01-16", "status":"turned-Off"}]}
+{"devices":[{"id":"8922843", "type":"humidity", "active":"2021-01-16", "status":"turned-Off"},{"id":"3789363", "type":"termal", "active":"2021-01-16", "status":"turned-On"},{"id":"2642331", "type":"door", "active":"2021-01-16", "status":"turned-On"}]}

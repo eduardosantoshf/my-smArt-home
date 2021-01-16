@@ -93,15 +93,3 @@ footer{
 .logs{
   display:none;
 }
-
-.mynots{
-  padding:5px;
-  display: flex;
-  flex-direction: column;
-}
-
-.mynots div{
-  padding: 5px;
-  color: white;
-  font-weight: bold;
-}

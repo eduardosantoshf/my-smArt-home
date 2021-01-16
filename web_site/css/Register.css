@@ -144,15 +144,3 @@ input[type=button], input[type=submit], input[type=reset]  { /*login button*/
   .underlineHover:hover:after{
     width: 100%;
   }
-
-  .mynots{
-    padding:5px;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .mynots div{
-    padding: 5px;
-    color: white;
-    font-weight: bold;
-  }

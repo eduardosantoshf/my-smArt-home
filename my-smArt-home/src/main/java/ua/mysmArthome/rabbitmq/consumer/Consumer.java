@@ -121,10 +121,10 @@ public class Consumer {
                     if(obj.getJSONObject("property").getString("value").equals("True")){
                         not+="harmful, alarm is ringing";
                         harmful=true;
-                        addLog(device_id, "True");
+                        addLog(device_id, "true");
                     }else {
                         not += "normal condition";
-                        addLog(device_id, "False");
+                        addLog(device_id, "false");
                     }
                     break;
 
@@ -132,10 +132,10 @@ public class Consumer {
                     if(obj.getJSONObject("property").getString("value").equals("True")){
                         not+="harmful, door bell is ringing";
                         harmful=true;
-                        addLog(device_id, "True");
+                        addLog(device_id, "true");
                     }else {
                         not += "normal condition";
-                        addLog(device_id, "False");
+                        addLog(device_id, "false");
                     }
 
                     break;
