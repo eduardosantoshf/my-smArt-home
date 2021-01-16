@@ -86,7 +86,8 @@ function fullFill(user_devices){
                 src="images/power-2.png"
                 operation="turnOn"
             }
-            ihtml+='<tr> <td>'+parseInt(device.id_)+'</td> <td>-</td> <td>'+device.type_+'</td> <td>'+device.status+' <img src="'+src+'" onclick="changeState(&quot;'+operation+'&quot;, &quot;'+device.id_+'&quot;)"></td> <td>'+device.active_since+'</td><td style="text-align:center"><img style="width: 16px; height: 16px;" src="images/down_arrow.png" id="logBtn_'+device.id_+'" onclick="openLogs('+device.id_+')"/></td> </tr> <tr><td colspan="6" class="logs" id="logs_'+device.id_+'"> teste </td></tr>';
+            //addDevice(device.id_, device.status, device.type_, device.active_since);
+            ihtml+='<tr> <td onclick="window.location.href=&quot;./DeviceInfo.html?id='+device.id_+'&quot;">'+parseInt(device.id_)+'</td> <td>-</td> <td>'+device.type_+'</td> <td>'+device.status+' <img src="'+src+'" onclick="changeState(&quot;'+operation+'&quot;, &quot;'+device.id_+'&quot;)"></td> <td>'+device.active_since+'</td><td style="text-align:center"><img style="width: 16px; height: 16px;" src="images/down_arrow.png" id="logBtn_'+device.id_+'" onclick="openLogs('+device.id_+')"/></td> </tr> <tr><td colspan="6" class="logs" id="logs_'+device.id_+'"> teste </td></tr>';
             document.getElementById("listDevices").innerHTML=ihtml;
         });
     }
@@ -102,7 +103,7 @@ function addDevice(id, status, type, active_since){
         src="images/power-2.png"
         operation="turnOn"
     }
-    var ihtml='<tr> <td>'+id+'</td> <td>-</td> <td>'+type+'</td> <td>'+status+' <img src="'+src+'" onclick="changeState(&quot;'+operation+'&quot;, &quot;'+id+'&quot;)"></td> <td>'+active_since+'</td><td style="text-align:center"><img style="width: 16px; height: 16px;" src="images/down_arrow.png" id="logBtn_'+id+'" onclick="openLogs('+id+')"/></td></tr><tr><td colspan="6" class="logs" id="logs_'+id+'"> teste </td></tr>';
+    var ihtml='<tr> <td onclick="window.location.href=&quot;./DeviceInfo.html?id='+id+'&quot;">'+id+'</td> <td>-</td> <td>'+type+'</td> <td>'+status+' <img src="'+src+'" onclick="changeState(&quot;'+operation+'&quot;, &quot;'+id+'&quot;)"></td> <td>'+active_since+'</td><td style="text-align:center"><img style="width: 16px; height: 16px;" src="images/down_arrow.png" id="logBtn_'+id+'" onclick="openLogs('+id+')"/></td></tr><tr><td colspan="6" class="logs" id="logs_'+id+'"> teste </td></tr>';
     document.getElementById("listDevices").innerHTML=document.getElementById("listDevices").innerHTML + ihtml;
 }
 
@@ -138,10 +139,8 @@ function openLogs(device_id){
         $("#logs_"+device_id).css("display", "table-cell");
         $("#logBtn_"+device_id).get(0).src='images/up_arrow.png';
 
-        // TODO: REQUEST LOGS
         $.ajax(EndSer+"device/logs/"+device_id,{
             type:'GET',
-            data:{username:username},
             success: function(data, status, xhr){
                 var obj = JSON.parse(data);
                 $("#logs_"+device_id).html(obj.logs);
@@ -161,15 +160,3 @@ function changeState(operation, device_id){
         }
     });
 }
-
-
-setInterval(function(){
-    console.log(localStorage.getItem("user_home"))
-    $.ajax(EndSer+"smartHome/notifications/"+localStorage.getItem("user_home"),{
-        type:'GET',
-        success: function(data, status, xhr){
-            
-            console.log(xhr.status)
-        }
-    });
-}, 3000);

@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>DeviceInfo</title>
+
+    <script src="js/Statistics.js"></script>
+    <link rel="stylesheet" href="css/Statistics.css">
+    <link rel="stylesheet" href="css/basic.css">
+    <!--bootstrap-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/basic.js"></script>
+    <script type="text/javascript">
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const id = urlParams.get("id");
+        const url = EndSer + "device/info/"+id;
+        $.ajax(url,{
+            type:'GET',
+            success: function(data, status, xhr){
+                //console.log(data);
+                var obj = JSON.parse(data);
+                
+                // type
+                // current_value
+                // status
+                // active_since
+                $("#device_type").text(obj.type.charAt(0).toUpperCase() + obj.type.slice(1));
+                $("#deviceImage").attr("src","images/"+obj.type+".png");
+                $("#device_value").text(obj.current_value);
+                $("#device_status").text(obj.status);
+                $("#device_active").text(obj.active_since);
+                $("#device_logs").html(obj.logs);
+            }
+        });
+    </script>
+  </head>
+
+  <body>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="#">my smArt home</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item ">
+                <a class="nav-link" href="Profile.html">Profile</a>
+              </li>
+              <li class="nav-item dropdown active">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Options
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <a class="dropdown-item" href="Devices.html">Devices</a>
+                </div>
+              </li>
+              <li class="nav-item ">
+                <a class="nav-link" href="Graphs.html">Graphs</a>
+              </li>
+              <li class="nav-item ">
+                <a class="nav-link" href="#" onclick="openNav()" style="position: absolute; right: 20px;"><img src="images/notis.png" height="22px" style="margin-left: 4px;" id="navBarIcon"></a>
+              </li>
+          </ul>
+        </div>
+      </nav>
+
+      <div id="mySidebar" class="sidebar">
+          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+          <div class="mynots" id="mynots"></div>
+      </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+
+            </div>
+            <div class="col-md-6">
+                <div class="card user-card" >
+                    <div class="card-block" >
+                        <div class="user-image">
+                            <img id="deviceImage" src="images/lights.png" alt="User-Profile-Image">
+                        </div>
+                        <h1 class="f-w-600 m-t-25 m-b-10  text-muted" id="device_type"></h2>
+                        <hr>
+                        <h3>Informations about this device:</h3>
+                        <hr>
+                        <h2 class="m-t-15 text-muted">Status:</h2>
+                        <h3 class="m-t-15" id="device_status"></h3>
+                        <h2 class="m-t-15 text-muted">Current Value:</h2>
+                        <h3 class="m-t-15" id="device_value"></h3>
+                        <h2 class="m-t-15 text-muted">Active Since:</h2>
+                        <h3 class="m-t-15" id="device_active"></h3>
+                        <hr>
+                        <h2 class="m-t-15 text-muted">Logs:</h2>
+                        <div id="device_logs">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+  </div>
+  </body>
+</html>
