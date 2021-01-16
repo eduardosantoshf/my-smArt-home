@@ -8,7 +8,7 @@
     <title>Profile</title>
 
     <script src="../static/js/Profile.js"></script>
-    <link rel="stylesheet" href="../static/css/Profile.css">
+    <link rel="stylesheet" href="css/Profile.css">
     <!--bootstrap-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <!-- Optional JavaScript -->
@@ -16,33 +16,57 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/basic.js"></script>
+
+    <script type="text/javascript">
+      $.ajax(EndSer+"user/profile/"+localStorage.getItem("username"),{
+        type:'GET',
+        success: function(data, status, xhr){
+            var obj=JSON.parse(data);
+            $("#username").text(obj.username);
+            $("#username2").text(obj.username);
+            $("#email").text(obj.email);
+            $("#phone").text(obj.phone);
+        }
+    });
+    </script>
   </head>
 
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-      <a class="navbar-brand" href="Home.html">my smArt home</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-    
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item ">
-            <a class="nav-link active" href="Profile.html">Profile</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Your options
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" href="Devices.html">Devices</a>
-              <a class="dropdown-item" href="Statistics.html">Statistics</a>
-              <a class="dropdown-item" href="Settings.html">Settings</a>
-            </div>
-          </li>
-        </ul>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="#">my smArt home</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item ">
+                <a class="nav-link" href="Profile.html">Profile</a>
+              </li>
+              <li class="nav-item dropdown active">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Options
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <a class="dropdown-item" href="Devices.html">Devices</a>
+                </div>
+              </li>
+              <li class="nav-item ">
+                <a class="nav-link" href="Graphs.html">Graphs</a>
+              </li>
+              <li class="nav-item ">
+                <a class="nav-link" href="#" onclick="openNav()" style="position: absolute; right: 20px;"><img src="images/notis.png" height="22px" style="margin-left: 4px;" id="navBarIcon"></a>
+              </li>
+          </ul>
+        </div>
+      </nav>
+
+      <div id="mySidebar" class="sidebar">
+          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+          <div class="mynots" id="mynots"></div>
       </div>
-    </nav>
 
     <div class="container">
       <div class="main-body">
@@ -54,34 +78,10 @@
                 <div class="d-flex flex-column align-items-center text-center">
                   <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150">
                   <div class="mt-3">
-                    <h3>Kenneth Valdez</h3>
+                    <h3 id="username2">Kenneth Valdez</h3>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="card mt-3">
-              <ul class="list-group list-group-flush">
-                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                  <h6 class="mb-0">Something</h6>
-                  <span class="text-secondary">Something</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                  <h6 class="mb-0">Something</h6>
-                  <span class="text-secondary">Something</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                  <h6 class="mb-0">Something</h6>
-                  <span class="text-secondary">Something</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                  <h6 class="mb-0">Something</h6>
-                  <span class="text-secondary">Something</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                  <h6 class="mb-0">Something</h6>
-                  <span class="text-secondary">Something</span>
-                </li>
-              </ul>
             </div>
           </div>
           <div class="col-md-8">
@@ -89,9 +89,9 @@
               <div class="card-body">
                 <div class="row">
                   <div class="col-sm-3">
-                    <h6 class="mb-0">Full Name</h6>
+                    <h6 class="mb-0">Username</h6>
                   </div>
-                  <div class="col-sm-9 text-secondary">
+                  <div class="col-sm-9 text-secondary" id="username">
                     Kenneth Valdez
                   </div>
                 </div>
@@ -100,7 +100,7 @@
                   <div class="col-sm-3">
                     <h6 class="mb-0">Email</h6>
                   </div>
-                  <div class="col-sm-9 text-secondary">
+                  <div class="col-sm-9 text-secondary" id="email">
                     fip@jukmuh.al
                   </div>
                 </div>
@@ -109,94 +109,11 @@
                   <div class="col-sm-3">
                     <h6 class="mb-0">Phone</h6>
                   </div>
-                  <div class="col-sm-9 text-secondary">
+                  <div class="col-sm-9 text-secondary" id="phone">
                     (239) 816-9029
                   </div>
                 </div>
                 <hr>
-                <div class="row">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">Mobile</h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary">
-                    (320) 380-4539
-                  </div>
-                </div>
-                <hr>
-                <div class="row">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">Address</h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary">
-                    Bay Area, San Francisco, CA, no 84
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="card mb-3">
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">idk</h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary">
-                    Something
-                  </div>
-                </div>
-                <hr>
-                <div class="row">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">idk</h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary">
-                    Something
-                  </div>
-                </div>
-                <hr>
-                <div class="row">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">idk</h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary">
-                    Something
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <div class="card mb-3">
-            <div class="mt-3" id="notiTitle">
-              <h3>Your Notifications</h3>
-            </div>
-            <hr/>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-sm-3">
-                  <h6 class="mb-0">Door Bell</h6>
-                </div>
-                <div class="col-sm-9 text-secondary">
-                  Someone was at the door at 12:05
-                </div>
-              </div>
-              <hr>
-              <div class="row">
-                <div class="col-sm-3">
-                  <h6 class="mb-0">Hoven</h6>
-                </div>
-                <div class="col-sm-9 text-secondary">
-                  Hoven was turned on at 11:55
-                </div>
-              </div>
-              <hr>
-              <div class="row">
-                <div class="col-sm-3">
-                  <h6 class="mb-0">Lights</h6>
-                </div>
-                <div class="col-sm-9 text-secondary">
-                  All lights were turned off at 10:00
-                </div>
               </div>
             </div>
           </div>

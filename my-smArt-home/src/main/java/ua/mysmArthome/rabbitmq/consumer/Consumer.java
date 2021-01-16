@@ -112,7 +112,6 @@ public class Consumer {
                         harmful=true;
                     }else {
                         not += "normal condition";
-                        addLog(device_id, "False");
                     }
                     addLog(device_id, obj.getJSONObject("property").getString("value"));
 

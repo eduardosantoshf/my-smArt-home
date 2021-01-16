@@ -2,6 +2,8 @@ package ua.mysmArthome.controller;
 
 import java.util.*;
 import javax.validation.Valid;
+
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -243,5 +245,73 @@ public class DeviceController {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         return dtf.format(now);
+    }
+
+    @CrossOrigin
+    @GetMapping("/info/{id}")
+    public String getDeviceInfo(@PathVariable(value = "id") String id) throws ResourceNotFoundException {
+        String retorno="";
+
+        Integer deviceId=Integer.valueOf(id);
+        Device device = deviceRepository.findDeviceByInBrokerId(deviceId)
+                .orElseThrow(() -> new ResourceNotFoundException("Device not found for this id : " + deviceId));
+
+        String d_type = producer.createWithProperty("get", id, "type");
+        JSONObject obj = new JSONObject(d_type);
+        d_type = obj.getString("type");
+
+        String curr_value = device.getLogs().get(device.getLogs().size()-1).getValue();
+
+        String d_status = producer.createWithProperty("get", id, "status");
+        obj = new JSONObject(d_status);
+        d_status = obj.getString("status");
+
+        String d_act = producer.createWithProperty("get", id, "active_since");
+        obj = new JSONObject(d_act);
+        d_act = obj.getString("active_since");
+
+        List<Log> d_logs = device.getLogs();
+        List<Log> d_logs_temp =d_logs;
+        Collections.reverse(d_logs_temp);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        //type, current_value, status, active_since, logs
+        retorno += "{\"type\": \""+d_type+"\", \"current_value\": \""+curr_value+"\", \"status\": \""+d_status+"\", \"active_since\": \""+d_act+"\", \"logs\":\"";
+
+        for(Log l : d_logs_temp){
+            retorno+="<p>[LOG AT "+dtf.format(l.getData())+"] "+l.getValue()+"</p>";
+        }
+        retorno += "\"}";
+
+        return retorno;
+    }
+
+    @CrossOrigin
+    @GetMapping("/graphs/{id}")
+    public String getDeviceGraphs(@PathVariable(value = "id") String id) throws ResourceNotFoundException {
+        String retorno="";
+
+        Integer deviceId=Integer.valueOf(id);
+        Device device = deviceRepository.findDeviceByInBrokerId(deviceId)
+                .orElseThrow(() -> new ResourceNotFoundException("Device not found for this id : " + deviceId));
+
+
+        List<Log> d_logs = device.getLogs();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+
+        retorno += "{\"logs\":[";
+
+        int count = 0;
+        for(Log l : d_logs){
+            count++;
+            if(l.getValue().contains("status") || l.getValue().contains("Device Found"))
+                continue;
+
+            retorno+="{\"data\":\""+dtf.format(l.getData())+"\", \"value\":"+l.getValue()+"}";
+            if(count<d_logs.size() )
+                retorno+=",";
+        }
+        retorno += "]}";
+
+        return retorno;
     }
 }

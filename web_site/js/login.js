@@ -18,6 +18,7 @@ function login(){
                 var obj=JSON.parse(data);
                 if(obj.status==true){ // se já estiver autenticado
                     localStorage.setItem("username", username)
+                    localStorage.setItem("token", obj.token)
                     window.location.href="Profile.html";
                     return true;
                 }else{

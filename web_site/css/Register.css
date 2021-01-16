@@ -6,6 +6,21 @@ html{
     background: #eeeeee;
 }
 
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+#content{
+  flex: 1 0 auto;
+  background: #eeeeee;
+}
+
+.jumbotron{
+  background: rgb(255,255,255);
+  background: linear-gradient(90deg, rgba(255,255,255,1) 100%, rgba(78,183,255,0.846673703661152) 100%);
+  color: black;
+}
 #h3SignIn {
     text-align: center;
     text-transform: uppercase;
@@ -39,7 +54,7 @@ html{
     text-align: center;
   }
   
-#formFooter { /*footer with Register link*/
+.formFooter { /*footer with Register link*/
     background-color: #f6f6f6;
     border-top: 1px solid #dce8f1;
     padding: 25px;
@@ -128,4 +143,16 @@ input[type=button], input[type=submit], input[type=reset]  { /*login button*/
   
   .underlineHover:hover:after{
     width: 100%;
+  }
+
+  .mynots{
+    padding:5px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .mynots div{
+    padding: 5px;
+    color: white;
+    font-weight: bold;
   }

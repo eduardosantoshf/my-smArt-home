@@ -62,7 +62,7 @@ public class NotificationController {
         for(Notification n : notificacoes){
             counter++;
 
-            retorno+="{\"deviceId\":\""+String.valueOf(n.getDevice().getId())+"\", \"value\":\""+n.getValue()+"\", \"date\":\""+dtf.format(n.getData())+"\"}";
+            retorno+="{\"deviceId\":\""+String.valueOf(n.getDevice().getInBroker_id())+"\", \"value\":\""+n.getValue()+"\", \"date\":\""+dtf.format(n.getData())+"\"}";
 
             if(counter<notificacoes.size())
                 retorno+=",";
@@ -88,7 +88,7 @@ public class NotificationController {
                 Notification n = new Notification();
                 n.setData(LocalDateTime.now());
                 n.setDevice(d);
-                n.setValue("New alarm1: " + s);
+                n.setValue("New alarm: " + s);
                 notificationRepository.save(n);
 
                 d.addListNotification(n);
