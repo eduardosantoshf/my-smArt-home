@@ -17,9 +17,10 @@ class Generator:
         content=f.read()
         content=json.loads(content.decode('latin'))
         devices=content["devices"]
+        
         devices=[d for d in devices if d["status"]=="turned-On"]
         print("Devices:")
-        print(devices)
+       
         if len(devices)>0:
             random.shuffle(devices)
             
