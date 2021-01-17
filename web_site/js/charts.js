@@ -66,7 +66,7 @@ function getDevices(){
         }
     });
 }
-var id=0;
+var chart_id=0;
 function addDevice(id, status, type, active_since){
     devices.push({id: id, status:status, type:type, active_since:active_since});
 
@@ -75,26 +75,50 @@ function addDevice(id, status, type, active_since){
         success: function(data4, status, xhr){
             var obj = JSON.parse(data4);
             const logs=obj.logs;
+            var dict = {}
 
-            list = [["Dia", "Quantidade de Alertas"]]
+
+            var div = document.createElement("div");
+            div.id="chart"+chart_id;
+            document.getElementById("containerCharts").appendChild(div);
+
+            list = []
             logs.forEach(l => {
-                list.push([l.data, l.value])
+                if(l.data in dict){
+                    var count = dict[l.data];
+                    count++;
+                    dict[l.data]=count;
+                }else{
+                    var count = 0;
+                    count++;
+                    dict[l.data]=count;
+                }
+
+                
+                list=[["Dia", "Quantidade de Alertas"]];
+                for(x in dict){
+                    list.push([x, dict[x]])
+                }
             });
             
-            drawChart(id, list, "Device " + id);
-            id++;
+            drawChart(chart_id, list, "Device " + chart_id);
+            chart_id++;
         }
     });
 
 }
 
-function drawChart(id, data, title) {
-    var data = google.visualization.arrayToDataTable(data);
+function drawChart(id, dataa, title) {
+    
+    var data = google.visualization.arrayToDataTable(dataa);
 
     var options = {
-      title: 'Daily Values'
+      title: title
     };
 
-    var chart = new google.visualization.PieChart(document.getElementById(id));
-    chart.draw(data, options);
+    //var chart = new google.visualization.PieChart(document.getElementById("chart"+id));
+    if(dataa.length>1){
+        var chart = new google.visualization.LineChart(document.getElementById("chart"+id));
+        chart.draw(data, options);
+    }
 }
