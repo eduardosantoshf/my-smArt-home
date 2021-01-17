@@ -101,7 +101,7 @@ public class UserController {
             User user = userRepository.findUserByUsername(username).get();
             if (user.getToken().equals(pwd)) //if the token is from the correct user then return true
             {
-                return "{\"status\": true, \"token\":" + pwd + "}"; //send token for login
+                return "{\"status\": true, \"token\": \"" + pwd + "\"}"; //send token for login
             }
             if (user.getPassword().equals(pwd)) {
                 //need to generate a token for the login
@@ -161,6 +161,24 @@ public class UserController {
         user_sm.add(sm.getId());
         activeUser.setHomes_id(user_sm);
         userRepository.save(activeUser);
+    }
+
+    @CrossOrigin
+    @GetMapping("/profile/{id}")
+    public String getProfile(@PathVariable(value = "id") String id) throws ResourceNotFoundException {
+        //for profile
+        String retorno="";
+
+        User user = userRepository.findUserByUsername(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Device not found for this id : " + id));
+
+        String email = user.getEmail();
+        String username = user.getUsername();
+        String phone = user.getPhone();
+
+        retorno += "{\"username\":\""+username+"\",\"email\":\""+email+"\",\"phone\":\""+phone+"\"}";
+
+        return retorno;
     }
 
 }
