@@ -66,28 +66,30 @@ function getDevices(){
         }
     });
 }
-
+var id=0;
 function addDevice(id, status, type, active_since){
     devices.push({id: id, status:status, type:type, active_since:active_since});
 
     $.ajax(EndSer+"device/graphs/"+id,{
         type:'GET',
         success: function(data4, status, xhr){
-            console.log(data4)
+            var obj = JSON.parse(data4);
+            const logs=obj.logs;
+
+            list = [["Dia", "Quantidade de Alertas"]]
+            logs.forEach(l => {
+                list.push([l.data, l.value])
+            });
+            
+            drawChart(id, list, "Device " + id);
+            id++;
         }
     });
 
 }
 
 function drawChart(id, data, title) {
-    var data = google.visualization.arrayToDataTable([
-      ['Task', 'Hours per Day'],
-      ['Work',     11],
-      ['Eat',      2],
-      ['Commute',  2],
-      ['Watch TV', 2],
-      ['Sleep',    7]
-    ]);
+    var data = google.visualization.arrayToDataTable(data);
 
     var options = {
       title: 'Daily Values'

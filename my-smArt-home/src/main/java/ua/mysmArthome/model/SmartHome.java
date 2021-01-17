@@ -13,7 +13,6 @@ public class SmartHome {
     private int id;
     private String name;
     private List<Device> list_devices;
-    private List<Logs> logs=new ArrayList<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,19 +31,6 @@ public class SmartHome {
         this.name = name;
     }
 
-    @OneToMany(mappedBy = "smarthome")
-    @JsonIgnore
-    public List<Logs> getLogs(){
-        return this.logs;
-    }
-
-    public void setLogs(List<Logs> logs){
-        this.logs=logs;
-    }
-
-    public void addLog(Logs log){
-        this.logs.add(log);
-    }
 
     @Column(name = "name", nullable = false)
     public String getName() {

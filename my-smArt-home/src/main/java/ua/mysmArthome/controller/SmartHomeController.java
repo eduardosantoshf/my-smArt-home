@@ -8,12 +8,16 @@ package ua.mysmArthome.controller;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.mysmArthome.exception.ResourceNotFoundException;
 import ua.mysmArthome.model.Device;
+import ua.mysmArthome.model.Notification;
 import ua.mysmArthome.model.SmartHome;
 import ua.mysmArthome.rabbitmq.consumer.Consumer;
 import ua.mysmArthome.repository.DeviceRepository;
@@ -29,7 +33,10 @@ public class SmartHomeController {
     @Autowired
     private SmartHomeRepository smartHomeRepository;
 
-    private Consumer consumer = new Consumer();
+
+
+    public SmartHomeController() throws ResourceNotFoundException {
+    }
 
     @GetMapping("/all")
     public List<SmartHome> getAllSmartHomes() {
@@ -59,34 +66,34 @@ public class SmartHomeController {
     @CrossOrigin
     @GetMapping("/notifications/{id}")
     public String getAllNotifications(@PathVariable int id) throws ResourceNotFoundException{
-        SmartHome smartHome = smartHomeRepository.findById(id).
+        /*SmartHome smartHome = smartHomeRepository.findById(id).
                 orElseThrow(() -> new ResourceNotFoundException("SmartHome " + id + " not found in SmartHome"));
         System.out.println("WAS CALLED");
         String list_of_notifications = "{";
 
-        for(Device device: smartHome.getList_devices()){
-            list_of_notifications +="\"notification\":\"";
+        Map<String, ArrayList<String>> notifications = consumer.getNotifications();
+        for(String device_id : notifications.keySet()){
+            Device d = deviceRepository.findDeviceByInBrokerId(Integer.valueOf(device_id)).orElseThrow(() -> new ResourceNotFoundException("Device "+device_id+" not found"));
 
-            System.out.println(device.getName()+" "+device.getId());
-            ArrayList<String> nots = consumer.getNotifications(""+device.getInBroker_id());
-            System.out.println(nots);
-            for (String not: nots){
-                list_of_notifications+=not;
+            for(String s : notifications.get(device_id)){
+                Notification n = new Notification();
+                n.setData(LocalDateTime.now());
+                n.setDevice(d);
+                n.setValue("New alarm: " + s);
 
-                String logs = device.getLogs();
-                logs="<p>[LOG AT "+getCurrentTime()+"] "+not+"</p>" + logs;
+                String logs = d.getLogs();
+                logs="<p>[LOG AT "+getCurrentTime()+"] "+s+"</p>" + logs;
                 if(logs.length()> 4000)
                     logs="<p>[LOG AT "+getCurrentTime()+"] logs cleaned</p>";
-                device.setLogs(logs);
-                deviceRepository.save(device);
-
-                System.out.println("Qual a notificação: "+not);
+                d.setLogs(logs);
+                d.getList_notifications().add(n);
+                deviceRepository.save(d);
             }
-
-            smartHome.getList_devices().remove(device);
         }
+
         list_of_notifications+="\"}";
-        return list_of_notifications;
+        return list_of_notifications;*/
+        return "";
     }
 
     public String getCurrentTime(){

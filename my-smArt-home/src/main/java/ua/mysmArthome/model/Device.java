@@ -1,9 +1,14 @@
 package ua.mysmArthome.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.beans.factory.annotation.Autowired;
+import ua.mysmArthome.repository.NotificationRepository;
+import ua.mysmArthome.model.Log;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -14,7 +19,8 @@ public class Device {
     private String name; //name of the device
     private SmartHome smarthome;
     private int inBroker_id;
-    private String logs="";
+    private List<Log> logs;
+    private List<Notification> list_notifications;
 
     public Device() {
     }
@@ -55,7 +61,6 @@ public class Device {
 
     @ManyToOne
     @JoinColumn(name="smartHome_id")
-
     public SmartHome getSmarthome() {
         return smarthome;
     }
@@ -69,13 +74,32 @@ public class Device {
         return "Device{" + "id=" + id + ", name=" + name + ", smarthome=" + smarthome + '}';
     }
 
-    @Column(name = "logs", nullable = false, length = 4096)
-    public String getLogs(){
+    @OneToMany(mappedBy = "device", cascade=CascadeType.REMOVE)
+    @JsonIgnore
+    public List<Log> getLogs(){
         return this.logs;
     }
-    public void setLogs(String logs){
+    public void setLogs(List<Log> logs){
         this.logs=logs;
     }
 
+    public void addListLogs(Log l){ this.logs.add(l); }
 
+    @OneToMany(mappedBy = "device", cascade=CascadeType.REMOVE)
+    @JsonIgnore
+    public List<Notification> getList_notifications() {
+        List<Notification> n = this.list_notifications;
+        return n;
+    }
+    public void setList_notifications(List<Notification> list_devices) {
+        this.list_notifications = list_devices;
+    }
+
+    public void addListNotification(Notification n){
+        this.list_notifications.add(n);
+    }
+
+    public void clearNotifications(){
+        this.list_notifications = new ArrayList<>();
+    }
 }
