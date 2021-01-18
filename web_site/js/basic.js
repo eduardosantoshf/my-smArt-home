@@ -99,7 +99,10 @@ setInterval(function(){
         type:'GET',
         success: function(data, status, xhr){
             var obj = JSON.parse(data)
-            $("#navBarIcon").attr("src","images/noti.png");
+            
+            if(obj.notificacoes.length>0)
+                $("#navBarIcon").attr("src","images/noti.png");
+
             obj.notificacoes.forEach(not => {
                 ihtml='<div class="mynotsNot"><div class="mynotsTitle">'+not.deviceId+'</div><div class="mynotsTitle">'+not.value+'</div><div class="mynotsTitle">'+not.date+'</div></div>';
                 $("#mynots").html($("#mynots").html() + ihtml);
