@@ -47,18 +47,18 @@ services:
       SPRING_RABBITMQ_HOST: rabbitmq
     restart: on-failure
 
-  sensing:
-    build:
-      context: broker
-      dockerfile: Dockerfile
-    depends_on:
-      - db
-      - rabbitmq
-      - backend
-    environment:
-      RABBITMQ_IP: rabbitmq
-      SERVER_IP: backend
-    #restart: on-failure
+  #sensing:
+  #  build:
+  #    context: broker
+  #    dockerfile: Dockerfile
+  #  depends_on:
+  #    - db
+  #    - rabbitmq
+  #    - backend
+  #  environment:
+  #    RABBITMQ_IP: rabbitmq
+  #    SERVER_IP: backend
+  #  #restart: on-failure
 
   client:
     build:
@@ -69,7 +69,7 @@ services:
     depends_on:
       - db
       - rabbitmq
-      - sensing
+      #- sensing
     volumes:
       - ./src:/etc/share/nginx/html
     environment: 
