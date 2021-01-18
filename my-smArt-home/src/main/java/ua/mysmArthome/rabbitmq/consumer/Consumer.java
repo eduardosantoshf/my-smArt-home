@@ -29,7 +29,6 @@ public class Consumer {
 
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("rabbitmq");
-        System.out.println("teste crl!!!!!!!");
         try {
             connection = factory.newConnection();
         } catch (IOException e) {
