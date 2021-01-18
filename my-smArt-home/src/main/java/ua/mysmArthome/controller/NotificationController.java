@@ -1,14 +1,11 @@
 package ua.mysmArthome.controller;
 
 import java.util.*;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.mysmArthome.exception.ResourceNotFoundException;
 import ua.mysmArthome.model.*;
 import ua.mysmArthome.rabbitmq.consumer.Consumer;
-import ua.mysmArthome.rabbitmq.producer.RpcProducer;
 import ua.mysmArthome.repository.*;
 
 import java.time.format.DateTimeFormatter;
@@ -41,9 +38,7 @@ public class NotificationController {
     @GetMapping("/getAll/{username}")
     public String getAll(@PathVariable(value = "username") String username) throws ResourceNotFoundException {
         loadNotifications();loadLogs();
-        String id="";
         Integer home_id = userRepository.findHomesByUsername(username).getHomes_id().get(0);
-        id=String.valueOf(home_id);
 
         // obtain all notifications from devices
         List<Notification> notificacoes = new ArrayList<>();

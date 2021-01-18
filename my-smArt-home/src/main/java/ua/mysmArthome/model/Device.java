@@ -1,14 +1,9 @@
 package ua.mysmArthome.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.beans.factory.annotation.Autowired;
-import ua.mysmArthome.repository.NotificationRepository;
-import ua.mysmArthome.model.Log;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @Entity

@@ -1,11 +1,8 @@
 package ua.mysmArthome.rabbitmq.consumer;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Optional;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeoutException;
 
 import com.rabbitmq.client.Channel;
@@ -14,14 +11,8 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 
 import org.json.*;
-import org.springframework.beans.factory.annotation.Autowired;
-
 
 import ua.mysmArthome.exception.ResourceNotFoundException;
-import ua.mysmArthome.model.Device;
-import ua.mysmArthome.model.Notification;
-import ua.mysmArthome.repository.DeviceRepository;
-import ua.mysmArthome.repository.NotificationRepository;
 
 public class Consumer {
 

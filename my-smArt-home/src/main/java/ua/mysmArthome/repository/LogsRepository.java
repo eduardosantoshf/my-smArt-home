@@ -1,7 +1,6 @@
 package ua.mysmArthome.repository;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
@@ -13,7 +12,6 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ua.mysmArthome.model.Log;
-import ua.mysmArthome.model.Notification;
 
 @Repository
 public interface LogsRepository extends JpaRepository<Log, Integer>{
