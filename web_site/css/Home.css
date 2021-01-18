@@ -152,18 +152,3 @@ input[type=button]:active, input[type=submit]:active, input[type=reset]:active  
   text-decoration: none;
   font-weight: 400;
 }
-
-.underlineHover:after {
-  display: block;
-  left: 0;
-  bottom: -10px;
-  width: 0;
-  height: 2px;
-  background-color: #31a8e4;
-  content: "";
-  transition: width 0.2s;
-}
-
-.underlineHover:hover:after{
-  width: 100%;
-}
