@@ -2,7 +2,6 @@ package ua.mysmArthome.model;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "Notification")

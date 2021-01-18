@@ -297,10 +297,10 @@ public class DeviceController {
         Integer deviceId=Integer.valueOf(id);
         Device device = deviceRepository.findDeviceByInBrokerId(deviceId)
                 .orElseThrow(() -> new ResourceNotFoundException("Device not found for this id : " + deviceId));
-
-
+        
         List<Log> d_logs = device.getLogs();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("HH");
 
         retorno += "{\"logs\":[";
 
@@ -313,7 +313,7 @@ public class DeviceController {
             }
             count++;
 
-            retorno+="{\"data\":\""+dtf.format(l.getData())+"\", \"value\":"+l.getValue()+"}";
+            retorno+="{\"data\":\""+dtf.format(l.getData())+"\",\"daytime\":\""+dtf2.format(l.getData())+":00\", \"value\":"+l.getValue()+"}";
             if(count<expected_length )
                 retorno+=",";
         }
