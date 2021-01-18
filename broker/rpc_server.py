@@ -6,7 +6,7 @@ from VirtualController import VirtualController
 class Generator:
     def __init__(self):
         self.connection = pika.BlockingConnection(
-    pika.ConnectionParameters(host='localhost'))
+    pika.ConnectionParameters(host='rabbitmq'))
         self.channel = self.connection.channel()
         self.channel.queue_declare(queue='rpc_queue')
         self.VirtualDevices = VirtualController()

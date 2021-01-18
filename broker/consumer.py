@@ -2,7 +2,7 @@
 import pika
 
 connection = pika.BlockingConnection(
-    pika.ConnectionParameters(host='localhost'))
+    pika.ConnectionParameters(host='rabbitmq'))
 channel = connection.channel()
 
 channel.exchange_declare(exchange='logs', exchange_type='fanout')
