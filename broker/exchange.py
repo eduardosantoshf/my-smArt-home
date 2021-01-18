@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import pika
 
-connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq'))
+connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
 channel = connection.channel()
 
 channel.exchange_declare(exchange='logs',
