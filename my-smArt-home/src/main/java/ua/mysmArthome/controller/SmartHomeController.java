@@ -7,28 +7,18 @@ package ua.mysmArthome.controller;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.mysmArthome.exception.ResourceNotFoundException;
-import ua.mysmArthome.model.Device;
-import ua.mysmArthome.model.Notification;
 import ua.mysmArthome.model.SmartHome;
-import ua.mysmArthome.rabbitmq.consumer.Consumer;
-import ua.mysmArthome.repository.DeviceRepository;
 import ua.mysmArthome.repository.SmartHomeRepository;
 
 @RestController
 @RequestMapping("/smartHome")
 public class SmartHomeController {
-
-    @Autowired
-    private DeviceRepository deviceRepository;
 
     @Autowired
     private SmartHomeRepository smartHomeRepository;

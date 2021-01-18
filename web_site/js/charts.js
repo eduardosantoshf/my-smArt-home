@@ -74,38 +74,118 @@ function addDevice(id, status, type, active_since){
         type:'GET',
         success: function(data4, status, xhr){
             var obj = JSON.parse(data4);
-            const logs=obj.logs;
-            var dict = {}
-
-
-            var div = document.createElement("div");
-            div.id="chart"+chart_id;
-            document.getElementById("containerCharts").appendChild(div);
-
-            list = []
-            logs.forEach(l => {
-                if(l.data in dict){
-                    var count = dict[l.data];
-                    count++;
-                    dict[l.data]=count;
-                }else{
-                    var count = 0;
-                    count++;
-                    dict[l.data]=count;
-                }
-
-                
-                list=[["Dia", "Quantidade de Alertas"]];
-                for(x in dict){
-                    list.push([x, dict[x]])
-                }
-            });
             
-            drawChart(chart_id, list, "Device " + chart_id);
-            chart_id++;
+            count(obj, type, id);
+
+            if(type=="humidity" || type=="temperature")
+                avg(obj, type, id);
+            if(type=="alarm")
+                alarm_count(obj, id);
         }
     });
 
+}
+
+function count(obj, type, id){
+    const logs=obj.logs;
+    var dict = {}
+
+
+    var div = document.createElement("div");
+    div.id="chart"+chart_id;
+    document.getElementById("containerCharts").appendChild(div);
+
+    list = []
+    logs.forEach(l => {
+        if(l.data in dict){
+            var count = dict[l.data];
+            count++;
+            dict[l.data]=count;
+        }else{
+            var count = 0;
+            count++;
+            dict[l.data]=count;
+        }
+
+        
+        list=[["Day", "Number of Alerts"]];
+        for(x in dict){
+            list.push([x, dict[x]])
+        }
+    });
+    
+    drawChart(chart_id, list, "No Alerts " + type +" #"+id);
+    chart_id++;
+}
+
+function alarm_count(obj, id){
+    const logs=obj.logs;
+    var dict = {}
+
+    var div = document.createElement("div");
+    div.id="chart"+chart_id;
+    document.getElementById("containerCharts").appendChild(div);
+
+    list = []
+    logs.forEach(l => {
+        if(l.value in dict){
+            var count = dict[l.value];
+            count++;
+            dict[l.value]=count;
+        }else{
+            var count = 0;
+            count++;
+            dict[l.value]=count;
+        }
+
+        list=[["Active", "Number of Alarms"]];
+        for(x in dict){
+            console.log(x);
+            if (x=="true")
+                list.push(["Active", dict[x]]);
+            else
+                list.push(["Idle", dict[x]]);
+        }
+    });
+
+    console.log(list);
+    
+    drawChartAlarms(chart_id, list, "Alarms During the Day #"+id);
+    chart_id++;
+}
+
+function avg(obj, type, id){
+    const logs=obj.logs;
+    var dict_avg = {}
+    var dict_count = {}
+
+    var div = document.createElement("div");
+    div.id="chart"+chart_id;
+    document.getElementById("containerCharts").appendChild(div);
+
+    list = []
+    logs.forEach(l => {
+        if(l.data in dict_avg && l.data in dict_count){
+            var count = dict_count[l.daytime];
+            var value = dict_avg[l.daytime]+l.value;
+            count++;
+            dict_avg[l.daytime]= value;
+            dict_count[l.daytime]=count++;
+        }else{
+            var count = 0;
+            count++;
+            dict_avg[l.daytime]= l.value;
+            dict_count[l.daytime]= count;
+        }
+    });
+
+    list_avg=[["Day", "Average"]];
+    for(x in dict_avg){
+        list_avg.push([x, dict_avg[x]/dict_count[x]]);
+    }
+    
+    drawChartAvg(chart_id, list_avg, "Average " + type +" #"+id);
+    chart_id++;
 }
 
 function drawChart(id, dataa, title) {
@@ -119,6 +199,45 @@ function drawChart(id, dataa, title) {
     //var chart = new google.visualization.PieChart(document.getElementById("chart"+id));
     if(dataa.length>1){
         var chart = new google.visualization.LineChart(document.getElementById("chart"+id));
+        chart.draw(data, options);
+    }
+}
+
+function drawChartAlarms(id, dataa, title) {
+    
+    var data = google.visualization.arrayToDataTable(dataa);
+
+    var options = {
+      title: title
+    };
+
+    var chart = new google.visualization.PieChart(document.getElementById("chart"+id));
+    chart.draw(data, options);
+}
+
+function drawChartAvg(id, dataa, title) {
+    
+    var data = google.visualization.arrayToDataTable(dataa);
+
+    var options = {
+      title: title,
+      isStacked: true,
+        hAxis: {
+          title: 'Time of Day',
+          format: 'HH:mm',
+          viewWindow: {
+            min: [0],
+            max: [23]
+          }
+        },
+        vAxis: {
+          title: 'Avg Temperature'
+        }
+    };
+
+    //var chart = new google.visualization.PieChart(document.getElementById("chart"+id));
+    if(dataa.length>1){
+        var chart = new google.visualization.ColumnChart(document.getElementById("chart"+id));
         chart.draw(data, options);
     }
 }

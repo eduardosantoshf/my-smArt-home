@@ -6,7 +6,7 @@ import json
 
 class Generator:
     def __init__(self, devices):
-        self.connection = pika.BlockingConnection(pika.ConnectionParameters(host = 'localhost'))
+        self.connection = pika.BlockingConnection(pika.ConnectionParameters(host = 'rabbitmq'))
         self.channel = self.connection.channel()
         self.channel.exchange_declare(exchange = 'logs', exchange_type = 'fanout')
         self.devices=devices
