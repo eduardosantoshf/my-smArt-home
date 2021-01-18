@@ -1,4 +1,3 @@
-
 var devices = [];
 function getDevices(){
     devices=[];
@@ -49,12 +48,12 @@ function getDevices(){
                                     if(device[2].type!=undefined && device[2].type!="None"){
                                         type=device[2].type
                                     }
-
+​
                                     var active_since="";
                                     if(device[3].active_since!=undefined && device[3].active_since!="None"){
                                         active_since=device[3].active_since
                                     }
-
+​
                                     if(device[1].status!=undefined && device[1].status!="None" && device[2].type!=undefined && device[2].type!="None" && device[3].active_since!=undefined && device[3].active_since!="None")
                                         addDevice(id, status, type, active_since)
                                 }
@@ -69,32 +68,32 @@ function getDevices(){
 var chart_id=0;
 function addDevice(id, status, type, active_since){
     devices.push({id: id, status:status, type:type, active_since:active_since});
-
+​
     $.ajax(EndSer+"device/graphs/"+id,{
         type:'GET',
         success: function(data4, status, xhr){
             var obj = JSON.parse(data4);
             
             count(obj, type, id);
-
-            if(type=="humidity" || type=="temperature")
+​
+            if(type=="humidity" || type=="temperature" || type=="proximity")
                 avg(obj, type, id);
-            if(type=="alarm")
-                alarm_count(obj, id);
+            if(type=="alarm" || type=="door")
+                alarm_count(obj, type, id);
         }
     });
-
+​
 }
-
+​
 function count(obj, type, id){
     const logs=obj.logs;
     var dict = {}
-
-
+​
+​
     var div = document.createElement("div");
     div.id="chart"+chart_id;
     document.getElementById("containerCharts").appendChild(div);
-
+​
     list = []
     logs.forEach(l => {
         if(l.data in dict){
@@ -106,7 +105,7 @@ function count(obj, type, id){
             count++;
             dict[l.data]=count;
         }
-
+​
         
         list=[["Day", "Number of Alerts"]];
         for(x in dict){
@@ -117,15 +116,15 @@ function count(obj, type, id){
     drawChart(chart_id, list, "No Alerts " + type +" #"+id);
     chart_id++;
 }
-
-function alarm_count(obj, id){
+​
+function alarm_count(obj, type, id){
     const logs=obj.logs;
     var dict = {}
-
+​
     var div = document.createElement("div");
     div.id="chart"+chart_id;
     document.getElementById("containerCharts").appendChild(div);
-
+​
     list = []
     logs.forEach(l => {
         if(l.value in dict){
@@ -137,8 +136,8 @@ function alarm_count(obj, id){
             count++;
             dict[l.value]=count;
         }
-
-        list=[["Active", "Number of Alarms"]];
+​
+        list=[["Activity", "Number of Alarms"]];
         for(x in dict){
             console.log(x);
             if (x=="true")
@@ -147,22 +146,22 @@ function alarm_count(obj, id){
                 list.push(["Idle", dict[x]]);
         }
     });
-
+​
     console.log(list);
     
-    drawChartAlarms(chart_id, list, "Alarms During the Day #"+id);
+    drawChartAlarms(chart_id, list, "Activity for "+ type +" #"+id);
     chart_id++;
 }
-
+​
 function avg(obj, type, id){
     const logs=obj.logs;
     var dict_avg = {}
     var dict_count = {}
-
+​
     var div = document.createElement("div");
     div.id="chart"+chart_id;
     document.getElementById("containerCharts").appendChild(div);
-
+​
     list = []
     logs.forEach(l => {
         if(l.data in dict_avg && l.data in dict_count){
@@ -178,47 +177,47 @@ function avg(obj, type, id){
             dict_count[l.daytime]= count;
         }
     });
-
+​
     list_avg=[["Day", "Average"]];
     for(x in dict_avg){
         list_avg.push([x, dict_avg[x]/dict_count[x]]);
     }
     
-    drawChartAvg(chart_id, list_avg, "Average " + type +" #"+id);
+    drawChartAvg(chart_id, list_avg, "Average " + type +" #"+id, type);
     chart_id++;
 }
-
+​
 function drawChart(id, dataa, title) {
     
     var data = google.visualization.arrayToDataTable(dataa);
-
+​
     var options = {
       title: title
     };
-
+​
     //var chart = new google.visualization.PieChart(document.getElementById("chart"+id));
     if(dataa.length>1){
         var chart = new google.visualization.LineChart(document.getElementById("chart"+id));
         chart.draw(data, options);
     }
 }
-
+​
 function drawChartAlarms(id, dataa, title) {
     
     var data = google.visualization.arrayToDataTable(dataa);
-
+​
     var options = {
       title: title
     };
-
+​
     var chart = new google.visualization.PieChart(document.getElementById("chart"+id));
     chart.draw(data, options);
 }
-
-function drawChartAvg(id, dataa, title) {
+​
+function drawChartAvg(id, dataa, title, type) {
     
     var data = google.visualization.arrayToDataTable(dataa);
-
+​
     var options = {
       title: title,
       isStacked: true,
@@ -231,10 +230,10 @@ function drawChartAvg(id, dataa, title) {
           }
         },
         vAxis: {
-          title: 'Avg Temperature'
+          title: 'Avg '+type
         }
     };
-
+​
     //var chart = new google.visualization.PieChart(document.getElementById("chart"+id));
     if(dataa.length>1){
         var chart = new google.visualization.ColumnChart(document.getElementById("chart"+id));
