@@ -76,7 +76,7 @@ function addDevice(id, status, type, active_since){
             
             count(obj, type, id);
 ​
-            if(type=="humidity" || type=="temperature" || type=="proximity")
+            if(type=="humidity" || type=="termal" || type=="proximity")
                 avg(obj, type, id);
             if(type=="alarm" || type=="door")
                 alarm_count(obj, type, id);
