@@ -15,7 +15,6 @@ import ua.mysmArthome.model.Notification;
 
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Integer>{
-    //List<Device> findById(int id);
 
     @Query("Select t from Notification t where t.id=:id")
     Optional<Notification> findNotificationBy(@Param("id") int id);

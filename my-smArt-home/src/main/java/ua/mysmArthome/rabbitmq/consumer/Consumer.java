@@ -151,7 +151,7 @@ public class Consumer {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //{"status":"harmful | normal", "id":"id_do_device", "property":{"name":"humidity", "value":"80"}}
+        
     }
 
     public void addLog(String device_id, String value){

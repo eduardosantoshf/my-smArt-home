@@ -15,7 +15,6 @@ import ua.mysmArthome.model.Log;
 
 @Repository
 public interface LogsRepository extends JpaRepository<Log, Integer>{
-    //List<Device> findById(int id);
 
     @Query("Select t from Log t where t.id=:id")
     Optional<Log> findLogBy(@Param("id") int id);

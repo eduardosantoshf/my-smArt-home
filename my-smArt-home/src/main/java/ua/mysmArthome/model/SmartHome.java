@@ -30,7 +30,6 @@ public class SmartHome {
         this.name = name;
     }
 
-
     @Column(name = "name", nullable = false)
     public String getName() {
         return name;

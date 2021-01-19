@@ -14,12 +14,6 @@ import org.springframework.data.repository.query.Param;
 @Repository
 public interface UserRepository  extends JpaRepository<User, Integer>{
     
-    /*List<User> findById(int id);
-
-    List<User> findByUsername(String name);
-
-    List<User> findByEmail(String email);*/
-    
     @Query("Select t from User t where t.id=:id")
     Optional<User> findUserById(@Param("id") int id);
     
