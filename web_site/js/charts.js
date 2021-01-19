@@ -77,10 +77,10 @@ function addDevice(id, status, type, active_since){
             
             count(obj, type, id);
 
-            if(type=="humidity" || type=="temperature")
+            if(type=="humidity" || type=="termal" || type=="proximity")
                 avg(obj, type, id);
-            if(type=="alarm")
-                alarm_count(obj, id);
+            if(type=="alarm" || type=="door")
+                alarm_count(obj, type, id);
         }
     });
 
@@ -118,7 +118,7 @@ function count(obj, type, id){
     chart_id++;
 }
 
-function alarm_count(obj, id){
+function alarm_count(obj, type, id){
     const logs=obj.logs;
     var dict = {}
 
@@ -138,7 +138,7 @@ function alarm_count(obj, id){
             dict[l.value]=count;
         }
 
-        list=[["Active", "Number of Alarms"]];
+        list=[["Activity", "Number of Alarms"]];
         for(x in dict){
             console.log(x);
             if (x=="true")
@@ -150,7 +150,7 @@ function alarm_count(obj, id){
 
     console.log(list);
     
-    drawChartAlarms(chart_id, list, "Alarms During the Day #"+id);
+    drawChartAlarms(chart_id, list, "Activity for "+ type +" #"+id);
     chart_id++;
 }
 
@@ -184,7 +184,7 @@ function avg(obj, type, id){
         list_avg.push([x, dict_avg[x]/dict_count[x]]);
     }
     
-    drawChartAvg(chart_id, list_avg, "Average " + type +" #"+id);
+    drawChartAvg(chart_id, list_avg, "Average " + type +" #"+id, type);
     chart_id++;
 }
 
@@ -215,7 +215,7 @@ function drawChartAlarms(id, dataa, title) {
     chart.draw(data, options);
 }
 
-function drawChartAvg(id, dataa, title) {
+function drawChartAvg(id, dataa, title, type) {
     
     var data = google.visualization.arrayToDataTable(dataa);
 
@@ -231,7 +231,7 @@ function drawChartAvg(id, dataa, title) {
           }
         },
         vAxis: {
-          title: 'Avg Temperature'
+          title: 'Avg '+type
         }
     };
 
