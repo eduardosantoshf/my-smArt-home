@@ -1,7 +1,7 @@
 
 
 
-var EndSer='http://localhost:8080/';
+var EndSer='http://192.168.160.210:8080/';
 var virtualKey = localStorage.getItem("zlsvktg"); // when user sign-in for the first time, server sends a random string with the virtual key for further uses. The key should work only for this user.
 var username = localStorage.getItem("username");
 
