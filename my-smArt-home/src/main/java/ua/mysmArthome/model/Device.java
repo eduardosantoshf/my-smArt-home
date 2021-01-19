@@ -50,7 +50,6 @@ public class Device {
     }
 
     public void setInBroker_id(Integer id) {
-        //change the name of the device
         this.inBroker_id=id;
     }
 
