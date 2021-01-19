@@ -17,10 +17,10 @@
   101631: Óscar Sánchez   -Developer
   
 ## Project bookmarks: 
-  http://192.168.160.210/ - VM link
-  http://192.168.160.210:8080/swagger-ui.html - Documentation of the API
-  https://app.zenhub.com/workspaces/mysmarthome-5fd659b844216c00180baa7d/board - project management boards 
-  https://drive.google.com/file/d/1c8qIqtubm7IvCspHP5Z8XLR64XrVz-PL/view?usp=sharing - editable version of the report
+  http://192.168.160.210/ - VM link \n
+  http://192.168.160.210:8080/swagger-ui.html - Documentation of the API \n
+  https://app.zenhub.com/workspaces/mysmarthome-5fd659b844216c00180baa7d/board - project management boards \n
+  https://drive.google.com/file/d/1c8qIqtubm7IvCspHP5Z8XLR64XrVz-PL/view?usp=sharing - editable version of the report \n
 
 ## Users already created for testing
   username: admin 
