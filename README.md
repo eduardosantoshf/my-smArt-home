@@ -32,6 +32,9 @@ This project was developed under the [Introduction to Software Engineering](http
 * username: admin  
 * password: admin
 
+## Grade 
+This project's grade was **14** out of 20.
+
 ## Authors
 * **André Morais**: [moraisandreua](https://github.com/moraisandreua)
 * **Diogo Moreira**: [diogoemoreira](https://github.com/diogoemoreira)
